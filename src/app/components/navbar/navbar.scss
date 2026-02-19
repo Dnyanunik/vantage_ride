@@ -1,0 +1,391 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 1000;
+}
+
+/* --- MAIN CONTAINER --- */
+.cockpit-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Transparent initially */
+  background: transparent;
+  backdrop-filter: blur(0px);
+
+  /* SCROLLED STATE (Glassmorphism) */
+  &.scrolled {
+    /* Uses Global Variable for background */
+    background: var(--nav-bg);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 5%;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+  }
+}
+
+/* --- BRANDING --- */
+.brand-zone {
+  display: flex;
+  flex-direction: column;
+
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    /* Uses Global Text Color */
+    color: var(--text-primary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+
+    .highlight { color: var(--brand-rose); }
+  }
+
+  .status-indicator {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 2px;
+    margin-top: -2px;
+
+    .dot {
+      width: 6px; height: 6px;
+      background: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ff88;
+      animation: blink 2s infinite;
+    }
+  }
+}
+
+/* --- DESKTOP MENU --- */
+.desktop-menu {
+  display: none;
+  gap: 40px;
+
+  @media(min-width: 900px) { display: flex; }
+
+  .nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    transition: 0.3s;
+
+    /* Hover Effect */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -5px; left: 0; width: 0%; height: 2px;
+      background: var(--brand-rose);
+      transition: 0.3s;
+    }
+
+    &:hover, &.active {
+      color: var(--text-primary);
+      &::after { width: 100%; }
+    }
+  }
+}
+
+/* --- ACTION ZONE --- */
+.action-zone {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Theme Toggle Button (Sun/Moon) */
+.theme-toggle {
+  /* Glassy Base */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+
+  /* Sizing & Layout */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  padding: 8px;
+
+  /* Flex Center */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden; /* Keeps rays inside */
+
+  /* --- ICON STYLING (SVG) --- */
+  svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bouncy rotation */
+  }
+
+  /* Specific Colors for Sun/Moon */
+  .sun {
+    stroke: var(--brand-gold); /* Gold Sun */
+    fill: rgba(255, 215, 0, 0.1);
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.5));
+  }
+
+  .moon {
+    stroke: var(--text-primary); /* Clean Moon */
+    fill: transparent;
+  }
+
+  /* --- HOVER EFFECTS --- */
+  &:hover {
+    background: var(--bg-secondary);
+    border-color: var(--brand-rose); /* Rose border on hover */
+    box-shadow: 0 0 15px rgba(233, 30, 99, 0.3); /* Rose Glow */
+    transform: translateY(-2px); /* Slight lift */
+
+    /* Rotate the icon inside */
+    svg {
+      transform: rotate(90deg) scale(1.1);
+    }
+  }
+
+  /* Active/Click Effect */
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Desktop Book Button */
+.book-btn-desktop {
+  display: none;
+  background: var(--brand-rose);
+  border: none;
+  color: white;
+  padding: 10px 25px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+  transition: 0.3s;
+
+  @media(min-width: 900px) { display: block; }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.5);
+  }
+}
+
+/* --- HAMBURGER --- */
+.mobile-toggle {
+  background: none; border: none; cursor: pointer;
+  width: 40px; height: 40px; position: relative; z-index: 1200;
+  display: block;
+  @media(min-width: 900px) { display: none; }
+
+  .bar {
+    position: absolute; left: 5px; width: 30px; height: 3px;
+    background: var(--text-primary); /* Adapts to theme */
+    transition: 0.3s; border-radius: 2px;
+
+    &.top { top: 10px; }
+    &.mid { top: 18px; }
+    &.bot { top: 26px; }
+  }
+
+  &.open {
+    .top { transform: rotate(45deg); top: 18px; background: var(--brand-rose); }
+    .mid { opacity: 0; }
+    .bot { transform: rotate(-45deg); top: 18px; background: var(--brand-rose); }
+  }
+}
+
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  // Dynamically switches background based on your body.theme-dark class
+  background: var(--bg-primary);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.4s ease-in-out;
+
+  &.active {
+    visibility: visible;
+    opacity: 1;
+    .mobile-links a, .mobile-controls > div, .theme-dashboard-toggle {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Decorative Glow using your Brand Rose */
+  .cockpit-glare {
+    position: absolute;
+    top: -10%; left: -10%;
+    width: 60%; height: 60%;
+    background: radial-gradient(circle, var(--brand-rose) 0%, transparent 70%);
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+}
+
+/* --- HUD Header --- */
+.hud-header {
+  margin-bottom: 40px;
+  .hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .hud-unit {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.65rem;
+      color: var(--brand-gold);
+      border: 1px solid var(--brand-gold);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .hud-close {
+      background: none; border: none;
+      color: var(--brand-rose); // Follows theme
+      mat-icon { font-size: 32px; }
+    }
+  }
+
+  .hud-title {
+    h1 {
+      font-size: 1.8rem; margin: 0; font-weight: 800;
+      color: var(--text-primary); // Respects Light/Dark text
+      span { color: var(--brand-gold); }
+    }
+    p { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 2px; }
+  }
+}
+
+/* --- Control Grid --- */
+.mobile-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: auto;
+
+  a {
+    background: var(--bg-secondary); // Follows Light/Dark mode backgrounds
+    border: 1px solid var(--border-color);
+    height: 110px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: 0.3s;
+    opacity: 0; transform: translateY(20px);
+    transition-delay: calc(var(--i) * 0.1s);
+
+    .icon-box {
+      width: 40px; height: 40px;
+      background: rgba(var(--brand-rose), 0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 10px;
+      mat-icon { color: var(--brand-rose); }
+    }
+
+    &:active {
+      border-color: var(--brand-rose);
+      background: var(--bg-primary);
+      box-shadow: var(--card-shadow);
+    }
+  }
+}
+
+/* --- Drive Mode Dashboard Toggle --- */
+.theme-dashboard-toggle {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+  opacity: 0; transform: translateY(20px);
+  transition: 0.4s ease 0.4s;
+
+  .label { font-size: 0.7rem; color: var(--text-secondary); font-weight: 700; }
+  .status {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--brand-gold); font-weight: 800; font-size: 0.9rem;
+  }
+}
+
+/* --- THE IGNITION BUTTON (Main Call-to-Action) --- */
+.ignition-zone {
+  opacity: 0; transform: translateY(20px);
+  transition: 0.4s ease 0.5s;
+}
+
+.mobile-book-btn {
+  width: 100%;
+  height: 70px;
+  background: var(--brand-rose); // Global brand color
+  border: none;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(233, 30, 99, 0.3);
+
+  .btn-inner {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    color: #ffffff; // Contrast for pink background
+    font-family: 'Rajdhani', sans-serif; font-weight: 900;
+    font-size: 1.1rem; letter-spacing: 1px;
+  }
+
+  /* Sweep animation for "High Tech" feel */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: ignition-sweep 3s infinite;
+  }
+}
+
+@keyframes ignition-sweep {
+  to { left: 100%; }
+}
+
+
+

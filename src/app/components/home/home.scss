@@ -1,0 +1,222 @@
+/* --- GLOBAL VARIABLES & RESET --- */
+:host {
+  display: block;
+  overflow-x: hidden;
+}
+
+/* Animations */
+.animate-up {
+  opacity: 0; transform: translateY(30px);
+  animation: fadeUp 0.8s ease forwards;
+}
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- 1. HERO SECTION --- */
+.hero {
+  position: relative;
+  height: 80vh; /* Taller on desktop */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1920&auto=format&fit=crop') center/cover;
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6), var(--bg-primary));
+  }
+
+  .hero-content {
+    position: relative; z-index: 2; color: white;
+    padding: 0 20px;
+
+    h1 {
+      font-size: 4rem; font-weight: 900; letter-spacing: 2px; margin: 0;
+      .gold { color: var(--brand-gold); }
+    }
+    p { font-size: 1.5rem; color: #ddd; margin-top: 10px; }
+  }
+}
+
+.hero-badges {
+  display: flex; gap: 20px; justify-content: center; margin: 30px 0;
+
+  .badge {
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
+    padding: 10px 20px; border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-weight: bold; color: var(--brand-cyan);
+  }
+}
+
+.hero-actions {
+  display: flex; gap: 15px; justify-content: center;
+
+  button {
+    padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem;
+    transition: transform 0.2s;
+    &:hover { transform: scale(1.05); }
+  }
+  .btn-primary { background: var(--brand-rose); color: white; }
+  .btn-outline { background: transparent; border: 2px solid white; color: white; }
+}
+
+/* --- 2. SECTIONS GENERAL --- */
+.section {
+  padding: 80px 10%;
+  background: var(--bg-primary);
+
+  .section-title {
+    text-align: center; margin-bottom: 50px;
+    h2 { font-size: 2.5rem; color: var(--text-primary); margin: 0; }
+    .line { width: 60px; height: 4px; background: var(--brand-rose); margin: 10px auto; }
+    p { color: var(--text-secondary); }
+  }
+}
+
+/* --- 3. FLEET GRID --- */
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.car-card {
+  background: var(--bg-secondary);
+  border-radius: 15px; overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  transition: 0.3s;
+
+  &:hover { transform: translateY(-5px); }
+
+  .img-box {
+    height: 200px; position: relative;
+    img { width: 100%; height: 100%; object-fit: cover; }
+    .rate-tag {
+      position: absolute; top: 10px; right: 10px;
+      background: var(--brand-rose); color: white;
+      padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;
+    }
+  }
+
+  .details {
+    padding: 20px;
+    h3 { margin: 0; color: var(--text-primary); font-size: 1.4rem; }
+    .type { color: var(--brand-cyan); font-weight: bold; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px; }
+    .desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4; }
+
+    .specs {
+      display: flex; justify-content: space-between;
+      margin: 15px 0; padding-top: 15px; border-top: 1px solid rgba(128,128,128,0.2);
+      font-size: 0.8rem; color: var(--text-secondary); font-weight: bold;
+    }
+
+    .btn-book {
+      width: 100%; padding: 12px; border: none; background: var(--text-primary); color: var(--bg-primary);
+      font-weight: bold; border-radius: 8px; cursor: pointer;
+      &:hover { background: var(--brand-gold); color: black; }
+    }
+  }
+}
+
+/* --- 4. PACKAGES TABLE --- */
+.table-container {
+  background: var(--bg-secondary);
+  border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(128,128,128,0.2);
+}
+
+.table-head, .table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr; /* 5 Columns */
+  padding: 15px 20px; align-items: center;
+  border-bottom: 1px solid rgba(128,128,128,0.1);
+}
+
+.table-head {
+  background: rgba(0,0,0,0.05); font-weight: bold; color: var(--text-secondary); font-size: 0.8rem;
+  .gold { color: var(--brand-rose); }
+}
+
+.table-row {
+  color: var(--text-primary);
+  &:hover { background: rgba(0,0,0,0.02); }
+  .dest { font-weight: bold; }
+  .price { font-family: monospace; font-size: 1.1rem; }
+  .gold { color: var(--brand-rose); font-weight: bold; }
+
+  .btn-small {
+    padding: 5px 15px; background: transparent; border: 1px solid var(--brand-gold); color: var(--brand-gold);
+    border-radius: 4px; cursor: pointer; font-size: 0.8rem;
+    &:hover { background: var(--brand-gold); color: black; }
+  }
+}
+
+.disclaimer { text-align: center; font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px; font-style: italic; }
+
+/* --- 5. FOOTER --- */
+.footer {
+  background: #111; color: white; padding: 40px 20px; text-align: center;
+  .contact-box {
+    display: flex; flex-direction: column; gap: 10px;
+    a { color: #aaa; text-decoration: none; font-size: 1.1rem; &:hover { color: var(--brand-rose); } }
+  }
+}
+
+/* ========================================= */
+/* === MOBILE ADJUSTMENTS (Smaller Size) === */
+/* ========================================= */
+@media (max-width: 768px) {
+
+  /* Make Hero Smaller */
+  .hero {
+    height: 60vh; /* Reduced height */
+    .hero-content h1 { font-size: 2.2rem; } /* Smaller Title */
+    .hero-content p { font-size: 1rem; }
+    .hero-badges { flex-direction: column; gap: 10px; margin: 15px 0; }
+    .hero-actions button { padding: 10px 20px; font-size: 0.9rem; }
+  }
+
+  /* Make Sections Compact */
+  .section {
+    padding: 40px 5%; /* Less padding */
+    .section-title h2 { font-size: 1.8rem; }
+  }
+
+  /* Compact Fleet Cards */
+  .fleet-grid {
+    grid-template-columns: 1fr; /* Stack cards */
+    gap: 20px;
+  }
+  .car-card .img-box { height: 180px; } /* Smaller image */
+
+  /* TRANSFORM TABLE TO CARDS FOR MOBILE */
+  .table-head { display: none; } /* Hide header */
+
+  .table-row {
+    display: flex; flex-direction: column; /* Stack info */
+    padding: 15px; text-align: center; gap: 8px;
+    border-bottom: 4px solid var(--bg-primary); /* Separatation */
+
+    .dest { font-size: 1.2rem; margin-bottom: 5px; }
+
+    .col { width: 100%; }
+
+    .price {
+      background: rgba(128,128,128,0.1); padding: 8px; border-radius: 5px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    /* Add labels for mobile clarity */
+    .price:nth-child(3)::before { content: "Swift:"; font-size: 0.8rem; color: var(--text-secondary); }
+    .price:nth-child(4)::before { content: "Ertiga:"; font-size: 0.8rem; color: var(--text-secondary); }
+
+    .btn-small { width: 100%; padding: 10px; margin-top: 5px; }
+  }
+}

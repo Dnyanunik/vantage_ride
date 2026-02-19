@@ -1,0 +1,83 @@
+<div class="home-wrapper">
+
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="animate-up">VISHNU <span class="gold">&</span> DEVA</h1>
+      <p class="animate-up delay-1">Premium Tours & Travels</p>
+
+      <div class="hero-badges animate-up delay-2">
+        <div class="badge">
+          <span>📅</span> Minimum 1 Day
+        </div>
+        <div class="badge">
+          <span>🛣️</span> 300km Package
+        </div>
+      </div>
+
+      <div class="hero-actions animate-up delay-3">
+        <button class="btn-primary" (click)="makeCall()">📞 Call Now</button>
+        <button class="btn-outline" (click)="sendEmail()">✉️ Email</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="section fleet">
+    <div class="section-title">
+      <h2>OUR PREMIUM FLEET</h2>
+      <div class="line"></div>
+      <p>Luxury at affordable rates</p>
+    </div>
+
+    <div class="fleet-grid">
+      <div class="car-card glass" *ngFor="let car of cars">
+        <div class="img-box">
+          <img [src]="car.image" [alt]="car.name">
+          <div class="rate-tag">₹{{ car.rate }} / km</div>
+        </div>
+        <div class="details">
+          <h3>{{ car.name }}</h3>
+          <p class="type">{{ car.type }}</p>
+          <p class="desc">{{ car.desc }}</p>
+
+          <div class="specs">
+            <span>⛽ Min: {{ car.minPkg }}</span>
+            <span>🅿️ Toll/Park: Extra</span>
+          </div>
+
+          <button class="btn-book" (click)="bookRide(car.name)">Book This Car</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section packages">
+    <div class="section-title">
+      <h2>ROUND TRIP PACKAGES</h2>
+      <div class="line"></div>
+      <p>Pune to Popular Destinations</p>
+    </div>
+
+    <div class="table-container glass">
+      <div class="table-head">
+        <div class="col">DESTINATION</div>
+        <div class="col">KM</div>
+        <div class="col">SWIFT (4 Seater)</div>
+        <div class="col gold">ERTIGA (7 Seater)</div>
+        <div class="col">ACTION</div>
+      </div>
+
+      <div class="table-row" *ngFor="let route of popularRoutes">
+        <div class="col dest">📍 {{ route.dest }}</div>
+        <div class="col km">{{ route.km }} KM</div>
+        <div class="col price">₹{{ route.price4 }}</div>
+        <div class="col price gold">₹{{ route.price6 }}</div>
+        <div class="col action">
+          <button class="btn-small" (click)="bookRide(route.dest)">Book</button>
+        </div>
+      </div>
+    </div>
+    <p class="disclaimer">Driver food & Toll/Parking extra Rates subject to change.</p>
+  </section>
+
+</div>

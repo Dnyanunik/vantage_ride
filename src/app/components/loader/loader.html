@@ -1,0 +1,40 @@
+<div class="splash-screen">
+
+  <div class="sky-gradient"></div>
+
+  <div class="spotlight"></div>
+
+  <div class="road-container">
+    <div class="road" [style.animation-duration]="roadSpeed"></div>
+  </div>
+
+  <div class="content-overlay">
+
+    <div class="brand-box">
+      <h1 class="chrome-text">VISHNU <span class="amp">&</span> DEVA</h1>
+      <div class="sub-text">PREMIUM TOURS & TRAVELS</div>
+    </div>
+
+    <div class="control-panel">
+
+      <button *ngIf="!isStarted" class="ignite-btn" (click)="startJourney()">
+        Start Engine
+      </button>
+
+      <div *ngIf="isStarted" class="loader-hud">
+        <div class="progress-info">
+          <span>{{ statusText }}</span>
+          <span>{{ progress }}%</span>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="progress"></div>
+          <div class="car-icon" [style.left.%]="progress">
+            🏎️
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

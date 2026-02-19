@@ -1,0 +1,300 @@
+/* --- LUXURY PALETTE --- */
+$bg-dark: #09090b;      /* Asphalt Black */
+$bg-deep: #1e1b4b;      /* Deep Midnight Blue */
+$accent-gold: #ffd700;  /* Pure Gold */
+$accent-cyan: #00f3ff;  /* Electric Blue */
+/* Chrome Text Gradient */
+$text-chrome: linear-gradient(to bottom, #ffffff 0%, #a5a5a5 50%, #ffffff 100%);
+
+:host {
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  overflow: hidden;
+}
+
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  height: 100dvh; /* Mobile viewport fix */
+  width: 100vw;
+  /* Deep radial gradient for atmosphere */
+  background: radial-gradient(circle at center, $bg-deep 0%, $bg-dark 100%);
+  overflow: hidden;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  /* CENTERS everything vertically */
+  justify-content: center;
+  align-items: center;
+  touch-action: none;
+}
+
+/* --- THE SPOTLIGHT (Background Glow) --- */
+.spotlight {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  height: 60vh;
+  background: radial-gradient(
+    circle,
+    rgba(0, 243, 255, 0.15) 0%,
+    rgba(27, 20, 100, 0.1) 40%,
+    transparent 70%
+  );
+  filter: blur(50px);
+  z-index: 1;
+  animation: pulseLight 4s infinite alternate;
+}
+
+@keyframes pulseLight {
+  from { opacity: 0.6; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* --- THE 3D ROAD --- */
+.road-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 35%; /* Low enough to not cover the button */
+  background: #020202;
+  transform: perspective(400px) rotateX(25deg);
+  overflow: hidden;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 243, 255, 0.5);
+  box-shadow: 0 -50px 100px rgba(0,0,0,0.9);
+
+  /* Fog Overlay */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #020202 10%, transparent 100%);
+    z-index: 4;
+  }
+}
+
+.road {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  left: -50%;
+  top: -50%;
+  background:
+    linear-gradient(transparent 0%, rgba(0, 243, 255, 0.3) 1%, transparent 2%), /* Horizontal Grid */
+    linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%); /* Vertical Lanes */
+  background-size: 100% 60px;
+  will-change: transform;
+  animation: moveRoad 2s linear infinite;
+}
+
+@keyframes moveRoad {
+  from { transform: translateY(0); }
+  to { transform: translateY(60px); }
+}
+
+/* --- CONTENT WRAPPER --- */
+.content-overlay {
+  position: absolute;
+  z-index: 50; /* Above everything */
+  inset: 0;
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* CRITICAL FIX: Groups Title and Button in the center */
+  justify-content: center;
+  align-items: center;
+  gap: 6vh; /* Space between Title and Button */
+
+  pointer-events: none; /* Let clicks pass through empty space */
+}
+
+/* --- BRANDING --- */
+.brand-box {
+  text-align: center;
+  position: relative;
+  z-index: 20;
+  pointer-events: auto;
+  /* Lift it slightly so it looks balanced */
+  transform: translateY(-2vh);
+}
+
+/* Chrome/Metallic Text Effect */
+.chrome-text {
+  font-size: clamp(2.5rem, 9vw, 5.5rem); /* Responsive Size */
+  font-weight: 800;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1;
+
+  /* The Gradient */
+  background: linear-gradient(to bottom, #fff 0%, #ccc 40%, #555 50%, #ccc 60%, #fff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+
+  /* Shadow for 3D pop */
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+
+  /* The "&" symbol in Gold */
+  .amp {
+    background: none;
+    -webkit-text-fill-color: $accent-gold;
+    font-size: 0.8em;
+    vertical-align: middle;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+  }
+}
+
+.sub-text {
+  margin-top: 15px;
+  color: $accent-cyan;
+  font-size: clamp(0.8rem, 3vw, 1.1rem);
+  letter-spacing: 5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+  position: relative;
+  display: inline-block;
+
+  /* Decorative Lines */
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 1px;
+    background: $accent-cyan;
+    opacity: 0.7;
+  }
+  &::before { left: -40px; }
+  &::after { right: -40px; }
+}
+
+/* --- CONTROLS (Button Area) --- */
+.control-panel {
+  width: 85%;
+  max-width: 400px;
+  /* Removed bottom margins so it stays near the title */
+  margin: 0;
+  pointer-events: auto;
+  position: relative;
+  z-index: 100;
+}
+
+/* Glassmorphism Button */
+.ignite-btn {
+  width: 100%;
+  padding: 18px;
+  /* Glass Effect */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid $accent-gold; /* Gold Accent Bar */
+  border-right: 3px solid $accent-gold;
+
+  color: white;
+  font-size: 1.1rem;
+  letter-spacing: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+  &:hover {
+    background: $accent-gold;
+    color: black;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    transform: scale(1.02);
+    border-color: $accent-gold;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* --- PROGRESS HUD --- */
+.loader-hud {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #333;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  color: $accent-gold;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.progress-track {
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  position: relative;
+  margin-top: 25px; /* Space for car */
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, $accent-gold, $accent-cyan);
+  border-radius: 3px;
+  box-shadow: 0 0 15px $accent-gold;
+  transition: width 0.1s linear;
+}
+
+.car-icon {
+  position: absolute;
+  top: -35px;
+  transform: translateX(-50%) scaleX(-1); /* Flips car */
+  font-size: 2.2rem;
+  filter: drop-shadow(0 4px 4px rgba(0,0,0,0.8));
+  transition: left 0.1s linear;
+  z-index: 20;
+}
+
+/* --- MOBILE ADJUSTMENTS --- */
+@media (max-width: 600px) {
+  /* Adjust Title Size */
+  .chrome-text {
+    font-size: 2.8rem;
+  }
+
+  /* Tweak Lines beside subtitle */
+  .sub-text::before, .sub-text::after {
+    width: 20px;
+    left: -30px;
+  }
+  .sub-text::after {
+    right: -30px;
+  }
+
+  /* Ensure button is easy to tap */
+  .control-panel {
+    width: 90%;
+  }
+
+  .ignite-btn {
+    padding: 20px; /* Larger tap area */
+  }
+}
+
+/* --- LANDSCAPE FIX (Short Screens) --- */
+@media (max-height: 500px) {
+  .content-overlay { gap: 2vh; }
+  .chrome-text { font-size: 2rem; }
+  .road-container { height: 30%; }
+}

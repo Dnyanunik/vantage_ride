@@ -1,0 +1,92 @@
+<div class="premium-dialog">
+  <h2 mat-dialog-title>SwiftLux Ride Booking</h2>
+
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Full Name</mat-label>
+      <input matInput [(ngModel)]="enquiry.name" required>
+      <mat-icon matPrefix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Mobile Number</mat-label>
+      <input matInput [(ngModel)]="enquiry.phone" required>
+      <mat-icon matPrefix>phone</mat-icon>
+    </mat-form-field>
+
+    <div class="route-container">
+      <div class="route-line-visual">
+        <div class="dot source-dot"></div>
+        <div class="line"></div>
+        <div class="dot dest-dot"></div>
+      </div>
+
+      <div class="route-inputs">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Source (Pickup)</mat-label>
+          <input type="text" matInput [formControl]="sourceControl" [matAutocomplete]="autoSource" required>
+          <mat-autocomplete #autoSource="matAutocomplete">
+            @for (loc of filteredSources | async; track loc) {
+              <mat-option [value]="loc">{{loc}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Destination (Drop)</mat-label>
+          <input type="text" matInput [formControl]="destControl" [matAutocomplete]="autoDest" required>
+          <mat-autocomplete #autoDest="matAutocomplete">
+            @for (loc of filteredDestinations | async; track loc) {
+              <mat-option [value]="loc">{{loc}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width car-select-field">
+      <mat-label>Select Vehicle</mat-label>
+      <mat-select [(ngModel)]="enquiry.car" name="car" required>
+        @for (car of availableCars; track car.name) {
+          <mat-option [value]="car.name">
+            <div class="car-option-layout">
+              <mat-icon>{{ car.icon }}</mat-icon>
+              <span class="car-name">{{ car.name }}</span>
+              <span class="car-type">({{ car.type }})</span>
+            </div>
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="fare-ticket" [class.active]="bookingSummary.valid">
+      <div class="ticket-header">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Fare Summary</span>
+      </div>
+      <div class="ticket-body">
+        <div class="main-price">{{ bookingSummary.price }}</div>
+        <div class="sub-details">{{ bookingSummary.details }}</div>
+      </div>
+      <div class="ticket-footer">*Toll & State Tax extra as per actuals</div>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Additional Details (Optional)</mat-label>
+      <textarea matInput [(ngModel)]="enquiry.message" rows="2" placeholder="Shifts, luggage, etc."></textarea>
+      <mat-icon matPrefix>notes</mat-icon>
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+   <button mat-button class="cancel-btn" (click)="ref.close()">
+    Cancel
+  </button>
+    <button mat-flat-button class="send-btn"
+            [disabled]="!enquiry.name || !enquiry.phone || !destControl.value"
+            (click)="submit()">
+      Confirm Booking <mat-icon>send</mat-icon>
+    </button>
+  </mat-dialog-actions>
+</div>

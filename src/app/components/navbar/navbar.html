@@ -1,0 +1,108 @@
+<nav class="cockpit-nav" [class.scrolled]="isScrolled">
+
+  <div class="brand-zone">
+    <div class="logo-text">
+      VISHNU <span class="highlight">&</span> DEVA
+    </div>
+    <div class="status-indicator">
+      <span class="dot"></span>
+      {{ themeService.themeSignal() === 'dark' ? 'NIGHT DRIVE' : 'DAY TRIP' }}
+    </div>
+  </div>
+
+  <div class="desktop-menu">
+    <a href="#" class="nav-link active">Home</a>
+    <a routerLink="/services" class="nav-link">Services</a>
+    <a routerLink="/about" class="nav-link">About US</a>
+  </div>
+
+  <div class="action-zone">
+
+   <button class="theme-toggle" (click)="themeService.toggleTheme()" title="Switch Theme">
+
+  <svg *ngIf="themeService.themeSignal() === 'light'"
+       class="theme-icon moon"
+       xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+
+  <svg *ngIf="themeService.themeSignal() === 'dark'"
+       class="theme-icon sun"
+       xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+
+</button>
+
+    <button class="book-btn-desktop" (click)="openBookingDialog()">
+  <span class="icon">🏎️</span> Book Ride
+</button>
+    <button class="mobile-toggle" (click)="toggleMenu()" [class.open]="isMenuOpen">
+      <span class="bar top"></span>
+      <span class="bar mid"></span>
+      <span class="bar bot"></span>
+    </button>
+  </div>
+
+</nav>
+<div class="mobile-overlay" [class.active]="isMenuOpen">
+  <div class="cockpit-glare"></div>
+
+  <div class="hud-header">
+    <div class="hud-top">
+      <span class="hud-unit">SYS_V2.0</span>
+      <button class="hud-close" (click)="toggleMenu()">
+        <mat-icon>power_settings_new</mat-icon>
+      </button>
+    </div>
+    <div class="hud-title">
+      <h1>VISHNU <span>&</span> DEVA</h1>
+      <p>PREMIUM TOURS & TRAVELS</p>
+    </div>
+  </div>
+
+  <div class="mobile-links">
+    <a href="#" (click)="toggleMenu()" style="--i:1;">
+      <div class="icon-box"><mat-icon>home</mat-icon></div>
+      <span>Home</span>
+    </a>
+
+  <a routerLink="/services" (click)="toggleMenu()" style="--i:3;">
+    <div class="icon-box"><mat-icon>verified</mat-icon></div>
+    <span>Services</span>
+  </a>
+
+    <a routerLink="/about" (click)="toggleMenu()" style="--i:4;">
+      <div class="icon-box"><mat-icon>hub</mat-icon></div>
+      <span>About US</span>
+    </a>
+  </div>
+
+  <div class="mobile-controls">
+    <button class="theme-dashboard-toggle" (click)="themeService.toggleTheme()" style="--i:5;">
+       <span class="label">DRIVE MODE</span>
+       <div class="status">
+         <mat-icon>{{ themeService.themeSignal() === 'dark' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+         {{ themeService.themeSignal() === 'dark' ? 'STEALTH' : 'DAYLIGHT' }}
+       </div>
+    </button>
+
+    <div class="ignition-zone" style="--i:6;">
+      <button class="mobile-book-btn" (click)="openBookingDialog(); toggleMenu()">
+        <div class="btn-inner">
+          <mat-icon>auto_awesome</mat-icon>
+          <span>BOOK LUXURY RIDE</span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+

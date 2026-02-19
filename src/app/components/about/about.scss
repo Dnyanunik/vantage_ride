@@ -1,0 +1,241 @@
+/* --- COCKPIT BOOT ANIMATION --- */
+@keyframes systemBoot {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-wrapper {
+  padding: 80px 24px;
+  background: var(--bg-primary);
+  min-height: 100vh;
+  overflow-x: hidden; // Prevents horizontal scroll during animations
+}
+
+.header-content {
+  text-align: center;
+  margin-bottom: 80px;
+
+  /* Applies the boot animation */
+  opacity: 0;
+  animation: systemBoot 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+  .hud-label { color: var(--brand-gold); letter-spacing: 4px; font-weight: 700; font-size: 0.75rem; }
+  h1 { font-size: 3rem; font-weight: 900; margin: 20px 0; color: var(--text-primary); }
+  .intro-text { max-width: 700px; margin: 0 auto; color: var(--text-secondary); line-height: 1.6; }
+}
+
+.team-container {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* --- IMPROVED MATERIAL CARD CUSTOMIZATION --- */
+.founder-card {
+  display: grid;
+  grid-template-columns: 1fr 2fr; // Gives text more horizontal space
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 24px !important;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+
+  /* Limit the overall height of the card on desktop */
+  min-height: 400px;
+  max-height: 550px;
+
+  /* Staggered Boot Animation for Cards */
+  opacity: 0;
+  animation: systemBoot 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  &:nth-child(1) { animation-delay: 0.2s; }
+  &:nth-child(2) { animation-delay: 0.4s; }
+
+  &.inverted {
+    direction: rtl; // Flips image to right side
+    .info-section { direction: ltr; text-align: left; }
+  }
+
+  /* --- IMAGE SECTION --- */
+  .image-section {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; // Ensures image doesn't bleed out
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; // Crops image to fit the box perfectly
+      filter: grayscale(40%);
+      display: block;
+      transition: transform 0.5s ease, filter 0.5s ease;
+    }
+
+    .badge-rose {
+      position: absolute; top: 15px; left: 15px;
+      background: var(--brand-rose); color: white;
+      padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.6rem;
+      z-index: 2;
+      letter-spacing: 1px;
+    }
+  }
+
+  /* --- INFO & TEXT SECTION --- */
+  .info-section {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; // Centers text vertically against the image
+    overflow-y: auto; // Adds a scrollbar INSIDE the card if text gets too long
+
+    .member-role { color: var(--brand-rose); font-weight: 800; letter-spacing: 1px; font-size: 0.8rem; }
+    .member-name { font-size: 1.8rem; font-weight: 800; margin: 5px 0 15px; color: var(--text-primary); }
+    .member-desc {
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+  }
+
+  /* Hover Interaction */
+  &:hover {
+    transform: translateY(-5px);
+    border-color: var(--brand-rose) !important;
+    .image-section img { filter: grayscale(0%); transform: scale(1.05); }
+  }
+}
+
+/* --- STATS HUD FRAME --- */
+.stats-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 25px;
+  margin-bottom: 20px;
+  background: rgba(233, 30, 99, 0.05); /* Very subtle rose tint */
+  border: 1px solid rgba(233, 30, 99, 0.15); /* Rose border */
+  border-radius: 16px; /* Smooth squircles */
+  padding: 15px 20px;
+  flex-wrap: wrap;
+  transition: all 0.3s ease;
+
+  /* Subtle glow when user hovers over the stats */
+  &:hover {
+    background: rgba(233, 30, 99, 0.08);
+    border-color: rgba(233, 30, 99, 0.3);
+    box-shadow: 0 4px 15px rgba(233, 30, 99, 0.1);
+  }
+
+  .stat-box {
+    text-align: center;
+    flex: 1;
+
+    .val {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--brand-gold);
+    }
+    .lab {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+/* --- CHIPS & BUTTONS --- */
+.tag-set {
+  margin-bottom: 20px;
+  mat-chip {
+    --mdc-chip-container-shape-radius: 8px;
+    background-color: rgba(233, 30, 99, 0.1) !important;
+    color: var(--brand-rose) !important;
+    border: 1px solid rgba(233, 30, 99, 0.2);
+    font-weight: 600;
+  }
+}
+
+.connect-btn {
+  border-color: var(--brand-rose) !important;
+  color: var(--brand-rose) !important;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: rgba(233, 30, 99, 0.05) !important;
+  }
+}
+
+/* --- MOBILE RESPONSIVENESS FIXES --- */
+@media (max-width: 768px) {
+  .header-content h1 { font-size: 2.2rem; }
+
+  .founder-card, .founder-card.inverted {
+    grid-template-columns: 1fr; /* Stacks image on top, text below */
+    max-height: none; /* Let the card stretch as needed */
+    direction: ltr; /* Resets text direction for inverted card */
+
+    .image-section {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 10; /* Perfect landscape ratio prevents photo overflow */
+
+      img {
+        object-position: top center; /* Focuses on the face if image needs to crop */
+      }
+    }
+
+    .info-section {
+      padding: 20px;
+
+      .member-name { font-size: 1.5rem; margin-bottom: 10px; }
+      .member-desc { font-size: 0.9rem; margin-bottom: 15px; }
+    }
+
+    /* Adjust HUD frame for tiny screens */
+    .stats-grid {
+      padding: 12px;
+      gap: 5px;
+      .stat-box .val { font-size: 1.1rem; }
+      .stat-box .lab { font-size: 0.6rem; }
+    }
+  }
+}
+.connect-btn {
+  border-color: var(--brand-rose) !important;
+  color: var(--brand-rose) !important;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  padding: 0 25px !important; // Gives more room for text
+  height: 40px !important;
+  line-height: 40px !important;
+
+  &:hover {
+    background: var(--brand-rose) !important;
+    color: white !important;
+    box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
+  }
+
+  mat-icon {
+    font-size: 18px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+}

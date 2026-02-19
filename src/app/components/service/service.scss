@@ -1,0 +1,106 @@
+.services-container {
+  padding: 80px 20px;
+  background: var(--bg-primary);
+  text-align: center;
+}
+
+.hud-header {
+  margin-bottom: 60px;
+  .system-status {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.7rem;
+    color: var(--brand-gold);
+    letter-spacing: 4px;
+  }
+  h2 { font-size: 2.5rem; font-weight: 800; margin: 10px 0; }
+  .line-divider {
+    width: 80px; height: 3px; background: var(--brand-rose); margin: 0 auto;
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.service-item {
+  position: relative;
+  height: 450px;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: transform 0.4s ease;
+
+  .bg-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.5) grayscale(20%);
+    transition: 0.6s ease;
+  }
+
+  /* Placeholder Image Classes - Replace with your assets */
+  .driver-img { background-image: url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1000'); }
+  .comfort-img { background-image: url('/image/ertiga22.jpg'); }
+  .journey-img { background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1000'); }
+
+  .glass-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 40px 25px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    color: white;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .service-icon {
+      color: var(--brand-rose);
+      font-size: 35px;
+      width: 35px;
+      height: 35px;
+    }
+
+    h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    .quality-tags {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      span {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &:hover {
+    transform: translateY(-10px);
+    border-color: var(--brand-rose);
+    .bg-image { transform: scale(1.1); filter: brightness(0.7) grayscale(0%); }
+    .glass-overlay { background: linear-gradient(to top, rgba(233, 30, 99, 0.4) 0%, transparent 100%); }
+  }
+}

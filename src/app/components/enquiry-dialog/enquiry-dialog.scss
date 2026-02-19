@@ -1,0 +1,298 @@
+.premium-dialog {
+  padding: 30px;
+  background: var(--bg-primary);
+  color: var(--text-primary); /* <--- ADD THIS: Ensures default text turns white in dark mode */
+
+  h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--brand-rose);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::after {
+      content: '';
+      flex-grow: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--brand-rose), transparent);
+    }
+  }
+
+  .description {
+    color: var(--text-secondary); /* Uses your #94a3b8 in dark mode */
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+  }
+}
+
+/* --- THEME-FIX FOR MATERIAL INPUTS --- */
+/* This ensures the labels, input text, and icons follow your theme variables */
+:host ::ng-deep {
+  .mat-mdc-form-field-label {
+    color: var(--text-secondary) !important;
+  }
+
+  .mat-mdc-input-element {
+    color: var(--text-primary) !important;
+    caret-color: var(--brand-rose) !important;
+  }
+
+  .mat-mdc-form-field-icon-prefix mat-icon {
+    color: var(--brand-rose) !important;
+  }
+
+  /* Outline color in dark mode */
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--border-color) !important;
+  }
+}
+
+/* --- NAVIGATION LOGIC VISUAL --- */
+.route-container {
+  display: flex;
+  gap: 20px;
+  margin: 10px 0 20px 0;
+
+  .route-line-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 0;
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      &.source-dot { border: 2px solid var(--brand-success); }
+      &.dest-dot { background: var(--brand-rose); box-shadow: 0 0 10px var(--brand-rose); }
+    }
+
+    .line {
+      width: 1px;
+      flex-grow: 1;
+      /* Changed from white to use the theme's border color */
+      border-left: 1px dashed var(--border-color);
+      margin: 5px 0;
+    }
+  }
+
+  .route-inputs {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.car-note {
+  font-size: 0.7rem;
+  color: var(--brand-gold);
+  text-align: center;
+  background: rgba(212, 175, 55, 0.05);
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.send-btn {
+  background: var(--brand-rose) !important;
+  color: white !important;
+  height: 50px;
+  padding: 0 30px !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 10px 20px rgba(233, 30, 99, 0.3) !important;
+
+  &:disabled {
+    background: #333 !important;
+    color: #666 !important;
+    box-shadow: none !important;
+  }
+}
+/* Target the internal Material Input elements */
+:host ::ng-deep {
+  /* 1. The actual text you type in the input */
+  .mat-mdc-input-element {
+    color: var(--text-primary) !important;
+    caret-color: var(--brand-rose) !important; /* Color of the blinking cursor */
+
+    &::placeholder {
+      color: var(--text-secondary) !important;
+    }
+  }
+
+  /* 2. The Floating Label (Name, Mobile Number, etc.) */
+  .mdc-floating-label,
+  .mat-mdc-form-field-label {
+    color: var(--text-secondary) !important;
+  }
+
+  /* 3. The Label color when the input is focused */
+  .mat-mdc-form-field.mat-focused .mdc-floating-label {
+    color: var(--brand-rose) !important;
+  }
+
+  /* 4. The Outline/Border of the input box */
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--border-color) !important;
+  }
+}
+
+/* Ensure the main dialog container also has the correct text color */
+.premium-dialog {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  /* ... keep your other existing styles ... */
+}
+
+/* Car Option Layout */
+.car-option-layout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  mat-icon {
+    color: var(--brand-rose);
+    font-size: 20px;
+  }
+
+  .car-name {
+    font-weight: 600;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  .car-type {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-left: auto;
+  }
+}
+
+/* Ensure the select text inside the input follows the theme */
+:host ::ng-deep {
+  .mat-mdc-select-value {
+    color: var(--text-primary) !important;
+  }
+  .mat-mdc-select-arrow {
+    color: var(--brand-rose) !important;
+  }
+}
+.price-tag-container {
+  background: rgba(255, 215, 0, 0.1); /* Soft Gold background */
+  border: 1px dashed var(--brand-gold);
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  margin: 20px 0;
+  animation: fadeIn 0.5s ease-in;
+
+  .price-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .price-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--brand-gold);
+    font-family: 'Rajdhani', sans-serif;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  }
+
+  .price-subtext {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fare-ticket {
+  margin: 20px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  overflow: hidden;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+
+  &.active {
+    opacity: 1;
+    border-color: var(--brand-gold);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+  }
+
+  .ticket-header {
+    background: rgba(255, 215, 0, 0.1);
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--brand-gold);
+  }
+
+  .ticket-body {
+    padding: 15px;
+    text-align: center;
+
+    .main-price {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .sub-details {
+      font-size: 0.85rem;
+      color: var(--brand-rose);
+      font-weight: 600;
+    }
+  }
+
+  .ticket-footer {
+    font-size: 0.65rem;
+    padding: 5px;
+    text-align: center;
+    background: rgba(0,0,0,0.05);
+    color: var(--text-secondary);
+  }
+}
+//for cancel button
+.cancel-btn {
+  font-family: 'Rajdhani', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  // Theme Logic
+  color: var(--text-secondary) !important; // Gray in light mode, Slate in dark mode
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+
+  &:hover {
+    background: rgba(var(--brand-rose), 0.05) !important;
+    color: var(--brand-rose) !important;
+    border-color: var(--brand-rose) !important;
+  }
+}
