@@ -79,52 +79,181 @@
     p { color: var(--text-secondary); }
   }
 }
-
 /* --- 3. FLEET GRID --- */
 .fleet-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  // Flexible grid that adjusts based on screen width
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 20px 0;
 }
 
 .car-card {
   background: var(--bg-secondary);
-  border-radius: 15px; overflow: hidden;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-  transition: 0.3s;
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  display: flex;
+  flex-direction: column;
 
-  &:hover { transform: translateY(-5px); }
+  /* --- 1. Interactive Hover Effect --- */
+  &:hover {
+    transform: translateY(-10px);
+    border-color: var(--brand-rose);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3),
+                0 0 15px rgba(233, 30, 99, 0.1);
 
-  .img-box {
-    height: 200px; position: relative;
-    img { width: 100%; height: 100%; object-fit: cover; }
-    .rate-tag {
-      position: absolute; top: 10px; right: 10px;
-      background: var(--brand-rose); color: white;
-      padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;
-    }
-  }
-
-  .details {
-    padding: 20px;
-    h3 { margin: 0; color: var(--text-primary); font-size: 1.4rem; }
-    .type { color: var(--brand-cyan); font-weight: bold; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px; }
-    .desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.4; }
-
-    .specs {
-      display: flex; justify-content: space-between;
-      margin: 15px 0; padding-top: 15px; border-top: 1px solid rgba(128,128,128,0.2);
-      font-size: 0.8rem; color: var(--text-secondary); font-weight: bold;
+    .img-box img {
+      transform: scale(1.1); // Smooth zoom on hover
     }
 
     .btn-book {
-      width: 100%; padding: 12px; border: none; background: var(--text-primary); color: var(--bg-primary);
-      font-weight: bold; border-radius: 8px; cursor: pointer;
-      &:hover { background: var(--brand-gold); color: black; }
+      background: var(--brand-rose) !important;
+      color: white !important;
+      box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+    }
+  }
+
+  /* --- 2. The Flexible Image Container --- */
+  .img-box {
+    height: 200px;
+    width: 100%;
+    position: relative;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; // Keeps the whole car visible
+      transition: transform 0.6s ease;
+      filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+    }
+
+    .rate-tag {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--brand-rose);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  }
+
+  /* --- 3. Dynamic Details --- */
+  .details {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .type {
+      color: var(--brand-gold);
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      // Truncate text if too long to keep cards even
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Interactive Specs Row */
+    .specs {
+      display: flex;
+      justify-content: space-between;
+      margin-top: auto; // Pushes specs to the bottom
+      padding-top: 15px;
+      border-top: 1px dashed var(--border-color);
+
+      .spec-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+
+        mat-icon {
+          font-size: 18px;
+          height: 18px;
+          width: 18px;
+          color: var(--brand-rose);
+        }
+
+        span {
+          font-size: 0.7rem;
+          color: var(--text-secondary);
+          font-weight: 600;
+        }
+      }
+    }
+
+    /* Sleek Action Button */
+    .btn-book {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--brand-rose);
+      background: transparent;
+      color: var(--brand-rose);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      mat-icon { font-size: 20px; }
     }
   }
 }
 
+/* --- Mobile Adjustments --- */
+@media (max-width: 480px) {
+  .fleet-grid {
+    grid-template-columns: 1fr; // Full width cards on mobile
+    gap: 20px;
+  }
+
+  .car-card .img-box {
+    height: 180px;
+  }
+}
 /* --- 4. PACKAGES TABLE --- */
 .table-container {
   background: var(--bg-secondary);
