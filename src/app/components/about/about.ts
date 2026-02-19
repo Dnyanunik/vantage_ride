@@ -37,7 +37,7 @@ export class About {
 
   public team: TeamMember[] = [
     {
-      name: 'The Visionary Founder',
+      name: 'Vishnu Shitole',
       role: 'FOUNDER & CHIEF PILOT',
       image: 'image/vishnu.jpeg',
       experience: '10 YEARS',
