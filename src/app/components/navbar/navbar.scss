@@ -213,6 +213,7 @@
   }
 }
 
+//mobile overlay (full screen menu)s
 .mobile-overlay {
   position: fixed;
   inset: 0;
@@ -228,10 +229,13 @@
   opacity: 0;
   transition: all 0.4s ease-in-out;
 
+  /* FIX: Allows scrolling on tiny screens so nothing gets cut off */
+  overflow-y: auto;
+
   &.active {
     visibility: visible;
     opacity: 1;
-    .mobile-links a, .mobile-controls > div, .theme-dashboard-toggle {
+    .mobile-links a, .mobile-controls > div, .theme-dashboard-toggle, .ignition-zone {
       opacity: 1;
       transform: translateY(0);
     }
@@ -252,7 +256,12 @@
 /* --- HUD Header --- */
 .hud-header {
   margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Centers children horizontally in the header
+
   .hud-top {
+    width: 100%; // Spans full width to keep Close button on the right
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -268,60 +277,83 @@
     }
 
     .hud-close {
-      background: none; border: none;
-      color: var(--brand-rose); // Follows theme
-      mat-icon { font-size: 32px; }
+      background: rgba(var(--brand-rose), 0.1);
+      border: 1px solid rgba(var(--brand-rose), 0.2);
+      color: var(--brand-rose);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
   .hud-title {
+    text-align: center; // Centers the text lines
+
     h1 {
-      font-size: 1.8rem; margin: 0; font-weight: 800;
-      color: var(--text-primary); // Respects Light/Dark text
-      span { color: var(--brand-gold); }
+      font-size: 1.8rem;
+      margin: 0;
+      font-weight: 800;
+      color: var(--text-primary);
+
+      span {
+        color: var(--brand-gold);
+      }
     }
-    p { font-size: 0.7rem; color: var(--text-secondary); letter-spacing: 2px; }
+
+    p {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      letter-spacing: 2px;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
   }
 }
 
-/* --- Control Grid --- */
+/* --- Control Grid (Now a Vertical List) --- */
 .mobile-links {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column; /* FIX: Stacks items one by one below each other */
   gap: 15px;
-  margin-bottom: auto;
+  margin-bottom: 80px; /* Spacing before the dashboard toggle */
 
   a {
-    background: var(--bg-secondary); // Follows Light/Dark mode backgrounds
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    height: 110px;
+    height: 75px; /* FIX: Thinner buttons since they stretch full width */
     border-radius: 16px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* FIX: Icon on left, text on right */
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Aligns content to the left */
+    padding: 0 20px; /* Inner spacing */
     color: var(--text-primary);
     text-decoration: none;
     font-family: 'Rajdhani', sans-serif;
-    text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 300;
+    font-size: 1.1rem; /* Slightly larger text for the list */
+    letter-spacing: 1.5px;
     transition: 0.3s;
     opacity: 0; transform: translateY(20px);
     transition-delay: calc(var(--i) * 0.1s);
 
     .icon-box {
-      width: 40px; height: 40px;
+      width: 25px; height: 25px;
       background: rgba(var(--brand-rose), 0.1);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 10px;
+      margin-right: 45px; /* FIX: Space between icon and text */
       mat-icon { color: var(--brand-rose); }
     }
 
     &:active {
       border-color: var(--brand-rose);
-      background: var(--bg-primary);
-      box-shadow: var(--card-shadow);
+      background: rgba(var(--brand-rose), 0.05);
+      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.15);
+      transform: scale(0.98); /* Slight click effect */
     }
   }
 }
@@ -337,6 +369,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: auto; /* Pushes this and the ignition button to the bottom */
   cursor: pointer;
   opacity: 0; transform: translateY(20px);
   transition: 0.4s ease 0.4s;
@@ -352,12 +385,13 @@
 .ignition-zone {
   opacity: 0; transform: translateY(20px);
   transition: 0.4s ease 0.5s;
+  padding-bottom: 20px; /* Safe space for modern phones with bottom bars */
 }
 
 .mobile-book-btn {
   width: 100%;
   height: 70px;
-  background: var(--brand-rose); // Global brand color
+  background: var(--brand-rose);
   border: none;
   border-radius: 50px;
   position: relative;
@@ -367,12 +401,13 @@
 
   .btn-inner {
     display: flex; align-items: center; justify-content: center; gap: 12px;
-    color: #ffffff; // Contrast for pink background
+    color: #ffffff;
     font-family: 'Rajdhani', sans-serif; font-weight: 900;
     font-size: 1.1rem; letter-spacing: 1px;
+    position: relative;
+    z-index: 2; /* Keeps text above the sweep animation */
   }
 
-  /* Sweep animation for "High Tech" feel */
   &::after {
     content: '';
     position: absolute;
@@ -380,12 +415,10 @@
     width: 100%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
     animation: ignition-sweep 3s infinite;
+    z-index: 1;
   }
 }
 
 @keyframes ignition-sweep {
   to { left: 100%; }
 }
-
-
-
