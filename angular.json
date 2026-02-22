@@ -29,7 +29,7 @@
             "server": "src/main.server.ts",
             "prerender": false,
             "ssr": false,
-            "outputMode": "server",
+            "outputMode": "browser",
             "budgets": [
               {
                 "type": "initial",
