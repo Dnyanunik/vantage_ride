@@ -4,7 +4,6 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './main.server';
-
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -16,13 +15,16 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Serve static files from /browser
-  server.get('*.*', express.static(browserDistFolder, {
-    maxAge: '1y'
+  // FIXED: Serve static files from /browser without using the *.* pattern
+  server.use(express.static(browserDistFolder, {
+    maxAge: '1y',
+    index: false,
+    redirect: false
   }));
 
   // All regular routes use the Angular engine
-  server.get('**', (req, res, next) => {
+  // The :url* is a named wildcard that satisfies the new requirement
+  server.get('/:url*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
     commonEngine
@@ -39,13 +41,3 @@ export function app(): express.Express {
 
   return server;
 }
-
-function run(): void {
-  const port = process.env['PORT'] || 4000;
-  const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
-}
-
-run();
