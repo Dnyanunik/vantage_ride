@@ -1,10 +1,10 @@
 {
   "name": "carservice",
   "version": "0.0.0",
- "scripts": {
+"scripts": {
   "ng": "ng",
   "start": "ng serve",
-  "build": "node ./set-env.js && npx ng build --configuration production",
+  "build": "npx ng build --configuration production",
   "watch": "ng build --watch --configuration development",
   "test": "ng test"
 },
