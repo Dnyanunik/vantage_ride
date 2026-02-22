@@ -1,0 +1,210 @@
+.notification-wrapper {
+  position: relative;
+  z-index: 1000;
+}
+
+.bell-btn {
+  background: transparent;
+  border: none;
+  color: #d4af37; // Gold bell
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  mat-icon { font-size: 28px; width: 28px; height: 28px; }
+
+  &:hover {
+    background: rgba(212, 175, 55, 0.1);
+    transform: scale(1.1);
+  }
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: 50px;
+  right: -10px;
+  width: 340px;
+  max-height: 500px;
+  overflow-y: auto;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+
+  // Custom Scrollbar
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 10px; }
+}
+
+.glass {
+  background: linear-gradient(145deg, rgba(30, 30, 30, 0.95), rgba(15, 15, 15, 0.98));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 175, 55, 0.3); // Gold border
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.5);
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #d4af37;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    &:hover { color: #fff; }
+  }
+}
+
+.panel-body {
+  padding: 20px;
+}
+
+.empty-state, .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #888;
+  padding: 40px 0;
+
+  mat-icon { font-size: 40px; width: 40px; height: 40px; color: rgba(212, 175, 55, 0.5); }
+}
+
+.mini-spinner {
+  width: 30px; height: 30px;
+  border: 2px solid rgba(255,255,255,0.1);
+  border-top: 2px solid #d4af37;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* Request Cards */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+}
+
+.request-card {
+  position: relative; /* Essential for the absolute passenger corner */
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 45px 15px 15px 15px; /* Added 45px top padding to push route details below the passenger box */
+  transition: transform 0.2s;
+
+  &:hover { border-color: rgba(212, 175, 55, 0.4); }
+
+  /* 🔴 NEW: Small Passenger Info in Top Corner */
+  .passenger-corner {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      color: #aaa;
+      letter-spacing: 0.5px;
+
+      mat-icon {
+        font-size: 11px;
+        width: 11px;
+        height: 11px;
+        color: #d4af37;
+      }
+    }
+
+    .p-name {
+      color: #eee;
+      font-weight: 600;
+    }
+  }
+
+  .route-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px; /* Gives some breathing room before the buttons */
+
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      p { margin: 0; font-size: 0.9rem; color: #eee; }
+
+      .dot {
+        width: 10px; height: 10px; border-radius: 50%;
+        &.pickup { background: #d4af37; box-shadow: 0 0 5px #d4af37; }
+        &.dropoff { background: #555; border: 1px solid #fff; }
+      }
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+
+    button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+
+      &.btn-accept {
+        background: #00e676; color: #000;
+        &:hover { background: #00c853; }
+      }
+      &.btn-reject {
+        background: transparent; color: #ff4444; border: 1px solid #ff4444;
+        &:hover { background: rgba(255, 68, 68, 0.1); }
+      }
+    }
+  }
+}
+
+/* Mobile Overlay so clicking outside closes it */
+.overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 999;
+}
+
+@media (max-width: 600px) {
+  .dropdown-panel {
+    position: fixed; top: 70px; left: 10px; right: 10px; width: auto;
+  }
+}

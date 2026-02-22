@@ -1,0 +1,90 @@
+<div class="history-wrapper">
+  <div class="container">
+
+    <div *ngIf="isOffline" class="network-alert">
+      <mat-icon>wifi_off</mat-icon>
+      <span>SYSTEM OFFLINE: Showing cached mission logs.</span>
+    </div>
+
+    <div class="header-section">
+      <h2>{{ isDriver ? 'DRIVER HISTORY' : 'MY BOOKING HISTORY' }}</h2>
+      <p>{{ isDriver ? 'Track your accepted, rejected, and completed missions.' : 'Track your upcoming and past rides.' }}</p>
+    </div>
+
+    <div *ngIf="isLoading" class="loader-container">
+      <div class="circular-spinner"></div>
+      <p>Synchronizing Logs...</p>
+    </div>
+
+    <div *ngIf="!isLoading && bookings.length === 0" class="empty-state glass">
+      <h2>📭 NO MISSIONS FOUND</h2>
+      <p>Your flight log is currently empty.</p>
+    </div>
+
+    <div class="rides-grid" *ngIf="!isLoading && bookings.length > 0">
+      <div class="ride-card glass" *ngFor="let ride of bookings">
+
+        <div class="card-header">
+          <h3>{{ isDriver ? 'Mission #' + (ride.id | slice:0:6) : (ride.car_name || 'Assigned Vehicle') }}</h3>
+          <span class="badge" [ngClass]="ride.status.toLowerCase()">
+            {{ ride.status | uppercase }}
+          </span>
+        </div>
+
+        <div class="passenger-info" *ngIf="isDriver">
+          <div class="info-row">
+            <mat-icon>person</mat-icon>
+            <span>{{ ride.user_name }}</span>
+          </div>
+          <div class="info-row">
+            <mat-icon>phone</mat-icon>
+            <span>{{ ride.user_phone }}</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="route">
+            <div class="location-point">
+              <span class="icon pickup-dot"></span>
+              <div class="text">
+                <small>DEPARTURE</small>
+                <p>{{ ride.source_location }}</p>
+              </div>
+            </div>
+
+            <div class="route-line"></div>
+
+            <div class="location-point">
+              <span class="icon dropoff-dot"></span>
+              <div class="text">
+                <small>DESTINATION</small>
+                <p>{{ ride.destination_location }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="datetime">
+            <mat-icon style="font-size: 16px; width: 16px; height: 16px;">schedule</mat-icon>
+            {{ ride.pickup_time | date:'MMM d, y, h:mm a' }}
+          </div>
+
+          <button class="btn-cancel"
+                  *ngIf="!isDriver && ride.status === 'pending'"
+                  (click)="cancelRide(ride.id)">
+            ABORT MISSION
+          </button>
+
+          <button class="btn-primary"
+                  *ngIf="isDriver && ride.status === 'accepted'"
+                  (click)="markAsCompleted(ride.id)">
+            MARK COMPLETED
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

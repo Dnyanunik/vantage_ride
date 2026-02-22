@@ -168,18 +168,40 @@
 }
 
 .connect-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border-color: var(--brand-rose) !important;
   color: var(--brand-rose) !important;
   font-family: 'Rajdhani', sans-serif;
   font-weight: 700;
-  letter-spacing: 1px;
+  font-size: 1rem; /* Default desktop size */
+  letter-spacing: 2px;
+  text-transform: uppercase;
   border-radius: 8px;
+  padding: 0 25px !important;
+  height: 40px !important;
+  line-height: 40px !important;
+  transition: all 0.3s ease;
 
   &:hover {
-    background-color: rgba(233, 30, 99, 0.05) !important;
+    background: var(--brand-rose) !important;
+    color: white !important;
+    box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
+    transform: translateY(-2px);
+  }
+
+  mat-icon, .arrow-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    margin-left: 4px;
+    color: inherit; /* Inherits the rose/white color automatically */
   }
 }
 
+/* --- MOBILE RESPONSIVENESS FIXES --- */
 /* --- MOBILE RESPONSIVENESS FIXES --- */
 @media (max-width: 768px) {
   .header-content h1 { font-size: 2.2rem; }
@@ -192,10 +214,13 @@
     .image-section {
       width: 100%;
       height: auto;
-      aspect-ratio: 16 / 10; /* Perfect landscape ratio prevents photo overflow */
+      aspect-ratio: auto; /* FIX: Let the image determine its own natural height to avoid cropping */
 
       img {
-        object-position: top center; /* Focuses on the face if image needs to crop */
+        width: 100%;
+        height: auto;
+        object-fit: cover; /* Ensures the image fills the width nicely */
+        object-position: top center; /* Focuses on the face/top if minor cropping occurs */
       }
     }
 
@@ -214,28 +239,19 @@
       .stat-box .lab { font-size: 0.6rem; }
     }
   }
-}
-.connect-btn {
-  border-color: var(--brand-rose) !important;
-  color: var(--brand-rose) !important;
-  font-family: 'Rajdhani', sans-serif;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-  padding: 0 25px !important; // Gives more room for text
-  height: 40px !important;
-  line-height: 40px !important;
 
-  &:hover {
-    background: var(--brand-rose) !important;
-    color: white !important;
-    box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
-  }
+  /* FIX: Adjust button text size and height for mobile view */
+  .connect-btn {
+    font-size: 0.8rem !important; /* Smaller text size */
+    padding: 0 16px !important;   /* Tighter padding */
+    height: 34px !important;      /* Shorter button height */
+    line-height: 34px !important;
+    letter-spacing: 1px;          /* Slightly less spacing to fit screens */
 
-  mat-icon {
-    font-size: 18px;
-    margin-left: 8px;
-    vertical-align: middle;
+    mat-icon, .arrow-icon {
+      font-size: 16px;            /* Scale down the icon to match */
+      height: 16px;
+      width: 16px;
+    }
   }
 }

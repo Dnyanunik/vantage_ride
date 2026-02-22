@@ -1,0 +1,68 @@
+<div class="notification-wrapper" *ngIf="isCustomer">
+
+  <button class="bell-btn" (click)="toggleNotifications()">
+    <mat-icon
+      [matBadge]="activeRides.length > 0 ? activeRides.length : null"
+      matBadgeColor="warn"
+      matBadgeSize="medium">
+      notifications
+    </mat-icon>
+  </button>
+
+  <div class="dropdown-panel glass" *ngIf="showNotifications">
+
+    <div class="panel-header">
+      <h3>Alerts & Updates</h3>
+      <button class="close-btn" (click)="toggleNotifications()"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div class="panel-body loading-state" *ngIf="isLoading">
+      <div class="mini-spinner"></div>
+      <span>Syncing telemetry...</span>
+    </div>
+
+    <div class="panel-body empty-state" *ngIf="!isLoading && activeRides.length === 0">
+      <mat-icon>done_all</mat-icon>
+      <p>All caught up! No active alerts.</p>
+    </div>
+
+    <div class="panel-body requests-list" *ngIf="!isLoading && activeRides.length > 0">
+      <div class="request-card" *ngFor="let ride of activeRides">
+
+        <button class="mini-dismiss" (click)="dismissNotification(ride.id, $event)">
+          <mat-icon>close</mat-icon>
+        </button>
+
+        <div class="driver-corner">
+          <span class="d-name"><mat-icon>engineering</mat-icon> {{ ride.driver_name }}</span>
+          <span class="d-phone" *ngIf="ride.status === 'accepted'">
+            <mat-icon>phone</mat-icon> {{ ride.driver_phone }}
+          </span>
+        </div>
+
+        <div class="card-content">
+          <div class="status-indicator" [ngClass]="ride.status"></div>
+
+          <div class="info-text">
+            <p class="msg">
+              <strong>Ride {{ ride.status | uppercase }}</strong>
+            </p>
+            <p class="details">{{ ride.source_location }} <mat-icon class="arrow">arrow_right_alt</mat-icon> {{ ride.destination_location }}</p>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <span class="car-type"><mat-icon>directions_car</mat-icon> {{ ride.car_name }}</span>
+
+          <button class="btn-read" (click)="dismissNotification(ride.id, $event)">
+            MARK AS READ
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="overlay" *ngIf="showNotifications" (click)="toggleNotifications()"></div>

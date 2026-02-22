@@ -1,0 +1,216 @@
+/* --- AUTH WRAPPER (Full Screen Background) --- */
+.auth-wrapper {
+  /* Ensure it takes full height, we will handle the navbar with padding */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;      /* Vertically centers the form */
+  justify-content: center;  /* Horizontally centers the form */
+
+  /* FIX: 100px top (Navbar height + gap), 20px right, 20px bottom, 20px left */
+  padding: 100px 20px 20px 20px;
+  box-sizing: border-box;   /* Stops the padding from stretching the screen height */
+
+  background: var(--bg-primary);
+  /* Cyber-grid background effect */
+  background-image:
+    linear-gradient(rgba(233, 30, 99, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(233, 30, 99, 0.02) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+/* --- THE GLASS CONTAINER (HUD Style) --- */
+.glass-container {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+
+  // Subtle top highlight to simulate glass edge
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--brand-rose), transparent);
+  }
+}
+
+/* --- HUD HEADER --- */
+.hud-header {
+  text-align: center;
+  margin-bottom: 35px;
+
+  .hud-unit {
+    display: inline-block;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.65rem;
+    color: var(--brand-gold);
+    border: 1px solid var(--brand-gold);
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-primary);
+    span { color: var(--brand-rose); }
+  }
+
+  p {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    letter-spacing: 3px;
+    margin-top: 5px;
+    text-transform: uppercase;
+  }
+}
+
+/* --- INPUT GROUPS --- */
+.input-group {
+  margin-bottom: 25px;
+
+  label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+
+  input {
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.4;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--brand-rose);
+      box-shadow: 0 0 10px rgba(233, 30, 99, 0.2);
+      transform: translateY(-1px);
+    }
+
+    /* ERROR STATE FOR INVALID INPUTS */
+    &.input-error {
+      border-color: #ff3366 !important;
+      box-shadow: 0 0 8px rgba(255, 51, 102, 0.2);
+    }
+  }
+}
+
+/* --- ERROR TEXT FOR VALIDATION --- */
+.error-text {
+  color: #ff3366;
+  font-size: 0.7rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  animation: flicker 0.3s ease-in-out;
+}
+
+@keyframes flicker {
+  0% { opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* --- THE ACTION BUTTON (Start Engine) --- */
+.auth-btn {
+  width: 100%;
+  height: 60px;
+  background: var(--brand-rose);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+
+  .btn-text {
+    color: #ffffff;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .btn-glow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: none;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(233, 30, 99, 0.4);
+
+    .btn-glow {
+      transform: translateX(100%);
+      transition: transform 0.6s ease;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--text-secondary);
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+/* --- FOOTER LINK --- */
+.switch-link {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+
+  a {
+    color: var(--brand-rose);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--brand-gold);
+      text-decoration: underline;
+    }
+  }
+}

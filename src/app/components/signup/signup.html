@@ -1,0 +1,108 @@
+<div class="auth-wrapper">
+  <div class="auth-scroll-viewport">
+    <div class="auth-card">
+      <div class="hud-header">
+        <span class="hud-unit">FLEET_REG_v1.0</span>
+        <h1>JOIN THE <span>FLEET</span></h1>
+      </div>
+
+      <form [formGroup]="signupForm" (ngSubmit)="onSignup()">
+
+        <div class="input-row">
+          <div class="input-field">
+            <label>IDENTIFICATION (Full Name)</label>
+            <input type="text" formControlName="fullName" placeholder="John Doe">
+            <div class="error-text" *ngIf="signupForm.get('fullName')?.invalid && signupForm.get('fullName')?.touched">
+              <span *ngIf="signupForm.get('fullName')?.errors?.['required']">Name is required.</span>
+              <span *ngIf="signupForm.get('fullName')?.errors?.['pattern']">Must be 3-50 letters. No special characters.</span>
+            </div>
+          </div>
+
+          <div class="input-field">
+            <label>CALLSIGN (Username)</label>
+            <input type="text" formControlName="username" placeholder="j_doe">
+            <div class="error-text" *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
+              <span *ngIf="signupForm.get('username')?.errors?.['required']">Username is required.</span>
+              <span *ngIf="signupForm.get('username')?.errors?.['pattern']">3-20 chars. Letters, numbers, underscores only.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-field">
+          <label>COMMUNICATION (Email)</label>
+          <input type="email" formControlName="email" placeholder="name@domain.com">
+          <div class="error-text" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+            <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is required.</span>
+            <span *ngIf="signupForm.get('email')?.errors?.['pattern'] || signupForm.get('email')?.errors?.['email']">Enter a valid email address.</span>
+          </div>
+        </div>
+
+        <div class="input-field">
+          <label>COMM-LINK (Phone)</label>
+          <input type="text" formControlName="phoneNumber" placeholder="+1234567890">
+          <div class="error-text" *ngIf="signupForm.get('phoneNumber')?.invalid && signupForm.get('phoneNumber')?.touched">
+            <span *ngIf="signupForm.get('phoneNumber')?.errors?.['required']">Phone number is required.</span>
+            <span *ngIf="signupForm.get('phoneNumber')?.errors?.['pattern']">Must be 10-15 digits.</span>
+          </div>
+        </div>
+
+        <div class="input-field">
+          <label>SECURE KEY (Password)</label>
+          <input type="password" formControlName="password" placeholder="••••••••">
+          <div class="error-text" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+            <span *ngIf="signupForm.get('password')?.errors?.['required']">Password is required.</span>
+            <span *ngIf="signupForm.get('password')?.errors?.['pattern']">Min 6 chars. Must contain at least 1 letter and 1 number.</span>
+          </div>
+        </div>
+
+        <div class="role-grid">
+          <label class="role-btn" [class.active]="signupForm.value.role === 'customer'">
+            <input type="radio" formControlName="role" value="customer"> PASSENGER
+          </label>
+          <label class="role-btn" [class.active]="signupForm.value.role === 'driver'">
+            <input type="radio" formControlName="role" value="driver"> PILOT
+          </label>
+        </div>
+
+        <div *ngIf="signupForm.value.role === 'driver'" class="driver-section">
+          <div class="section-divider"><span>VEHICLE MANIFEST</span></div>
+
+          <div class="input-field">
+            <label>LICENSE NUMBER</label>
+            <input type="text" formControlName="licenseNumber" placeholder="DL-XXXXX">
+            <div class="error-text" *ngIf="signupForm.get('licenseNumber')?.invalid && signupForm.get('licenseNumber')?.touched">
+              <span *ngIf="signupForm.get('licenseNumber')?.errors?.['required']">License is required.</span>
+              <span *ngIf="signupForm.get('licenseNumber')?.errors?.['pattern']">Invalid format (6-20 alphanumeric).</span>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="input-field">
+              <label>VEHICLE MODEL</label>
+              <input type="text" formControlName="vehicleModel" placeholder="Innova Crysta">
+              <div class="error-text" *ngIf="signupForm.get('vehicleModel')?.invalid && signupForm.get('vehicleModel')?.touched">
+                <span *ngIf="signupForm.get('vehicleModel')?.errors?.['required']">Model is required.</span>
+                <span *ngIf="signupForm.get('vehicleModel')?.errors?.['pattern']">Letters and numbers only.</span>
+              </div>
+            </div>
+
+            <div class="input-field">
+              <label>PLATE NUMBER</label>
+              <input type="text" formControlName="vehiclePlate" placeholder="MH-12-AB-1234">
+              <div class="error-text" *ngIf="signupForm.get('vehiclePlate')?.invalid && signupForm.get('vehiclePlate')?.touched">
+                <span *ngIf="signupForm.get('vehiclePlate')?.errors?.['required']">Plate number is required.</span>
+                <span *ngIf="signupForm.get('vehiclePlate')?.errors?.['pattern']">Must be standard format (e.g., MH-12-AB-1234).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="ignition-btn" [disabled]="loading || signupForm.invalid">
+          {{ loading ? 'INITIALIZING...' : 'START REGISTRATION' }}
+        </button>
+      </form>
+
+      <p class="footer-link">ALREADY REGISTERED? <a routerLink="/login">LOGIN</a></p>
+    </div>
+  </div>
+</div>

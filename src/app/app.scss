@@ -6,3 +6,15 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* app.component.scss */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content-area {
+  flex: 1; /* This pushes the footer down and takes up available space */
+  overflow: hidden; /* Let the individual components handle their own scrolling */
+}

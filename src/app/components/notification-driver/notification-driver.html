@@ -1,0 +1,58 @@
+<div class="notification-wrapper" *ngIf="isDriver">
+
+  <button class="bell-btn" (click)="toggleNotifications()">
+    <mat-icon
+      [matBadge]="pendingRequests.length > 0 ? pendingRequests.length : null"
+      matBadgeColor="warn"
+      matBadgeSize="medium">
+      notifications
+    </mat-icon>
+  </button>
+
+  <div class="dropdown-panel glass" *ngIf="showNotifications">
+
+    <div class="panel-header">
+      <h3>Incoming Missions</h3>
+      <button class="close-btn" (click)="toggleNotifications()"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div class="panel-body loading-state" *ngIf="isLoading">
+      <div class="mini-spinner"></div>
+      <span>Decrypting coordinates...</span>
+    </div>
+
+    <div class="panel-body empty-state" *ngIf="!isLoading && pendingRequests.length === 0">
+      <mat-icon>done_all</mat-icon>
+      <p>No pending missions.</p>
+    </div>
+
+    <div class="panel-body requests-list" *ngIf="!isLoading && pendingRequests.length > 0">
+      <div class="request-card" *ngFor="let req of pendingRequests">
+
+        <div class="passenger-corner">
+          <span class="p-name"><mat-icon>person</mat-icon> {{ req.user_name || 'Unknown' }}</span>
+          <span class="p-phone"><mat-icon>phone</mat-icon> {{ req.user_phone || 'N/A' }}</span>
+        </div>
+
+        <div class="route-info">
+          <div class="location">
+            <span class="dot pickup"></span>
+            <p>{{ req.source_location }}</p>
+          </div>
+          <div class="location">
+            <span class="dot dropoff"></span>
+            <p>{{ req.destination_location }}</p>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn-reject" (click)="rejectRide(req.id)">REJECT</button>
+          <button class="btn-accept" (click)="acceptRide(req.id)">ACCEPT</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="overlay" *ngIf="showNotifications" (click)="toggleNotifications()"></div>

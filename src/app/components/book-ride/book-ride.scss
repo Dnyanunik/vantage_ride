@@ -1,0 +1,162 @@
+.booking-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* 120px padding at the top creates distance from your fixed navigation bar */
+  padding: 120px 20px 40px;
+}
+
+.booking-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 16px;
+
+  /* Adaptive glassmorphism */
+  background: rgba(128, 128, 128, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+
+  .header {
+    text-align: center;
+    margin-bottom: 25px;
+
+    h2 {
+      color: var(--text-color, inherit);
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+    }
+
+    .car-badge {
+      color: var(--text-muted, #888);
+      font-size: 0.9rem;
+      span {
+        color: #d4af37; /* Gold accent */
+        font-weight: bold;
+      }
+    }
+  }
+
+  /* Work in Progress Box Styling */
+  .map-placeholder {
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px dashed rgba(128, 128, 128, 0.3);
+    border-radius: 8px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color, #ccc);
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+
+    strong {
+      color: #d4af37;
+      margin-left: 5px;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .row {
+      display: flex;
+      gap: 15px;
+      .half { flex: 1; }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        color: var(--text-color, inherit);
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        opacity: 0.8;
+      }
+
+      /* Unified styling for Inputs and Selection Boxes */
+      input, .custom-select {
+        background: rgba(128, 128, 128, 0.1);
+        border: 1px solid rgba(128, 128, 128, 0.2);
+        color: var(--text-color, inherit);
+        padding: 12px;
+        border-radius: 8px;
+        width: 100%;
+        outline: none;
+        font-size: 1rem;
+        transition: border 0.3s ease;
+
+        &:focus {
+          border-color: #d4af37;
+        }
+      }
+
+      /* Dropdown specific styling */
+      .custom-select {
+        cursor: pointer;
+
+        option {
+          /* Solid background for the dropdown options so text is readable */
+          background-color: var(--bg-color, #24243e);
+          color: var(--text-color, #fff);
+          padding: 10px;
+        }
+      }
+
+      /* Calendar/Clock Icon colors */
+      input[type="date"]::-webkit-calendar-picker-indicator,
+      input[type="time"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        filter: invert(0.8); /* Makes icon visible on dark themes */
+      }
+    }
+
+    .btn-primary {
+      margin-top: 15px;
+      background: linear-gradient(45deg, #d4af37, #aa8222);
+      color: #000;
+      font-weight: bold;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+      }
+    }
+  }
+}
+/* Add this inside the form section in book-ride.scss */
+    .location-section {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .section-label {
+        color: var(--text-color, inherit);
+        font-size: 0.9rem;
+        font-weight: bold;
+        opacity: 0.9;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+    }

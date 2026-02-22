@@ -41,3 +41,8 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+
+# Ignore environment variables and API keys
+src/environments/environment.ts
+src/environments/environment.development.ts

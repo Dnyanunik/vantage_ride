@@ -1,0 +1,96 @@
+<div *ngIf="isLoading" class="system-status-container">
+  <mat-spinner diameter="50" color="accent"></mat-spinner>
+  <p>Syncing active flight paths...</p>
+</div>
+
+<div *ngIf="!isLoading && errorMessage" class="system-error-container">
+  <mat-icon>wifi_off</mat-icon>
+  <p>{{ errorMessage }}</p>
+  <button class="btn-retry" (click)="loadActiveRoutes()">RETRY CONNECTION</button>
+</div>
+
+<div *ngIf="!isLoading && !errorMessage">
+   </div>
+<div class="routes-panel-wrapper">
+
+  <div class="pilot-command-module glass-panel" *ngIf="isDriver">
+    <div class="module-header">
+      <mat-icon class="cyan">radar</mat-icon>
+      <h3>DEPLOY NEW ROUTE</h3>
+    </div>
+
+    <form class="route-form" (ngSubmit)="broadcastRoute()">
+      <div class="form-row">
+        <div class="input-group">
+          <label>DESTINATION</label>
+          <input type="text" [(ngModel)]="newRoute.dest" name="dest" placeholder="e.g. Goa" required>
+        </div>
+        <div class="input-group">
+          <label>DISTANCE (KM)</label>
+          <input type="text" [(ngModel)]="newRoute.km" name="km" placeholder="e.g. 1000" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="input-group">
+          <label class="cyan">SWIFT RATE (4S)</label>
+          <input type="number" [(ngModel)]="newRoute.price4" name="price4" placeholder="₹" required>
+        </div>
+        <div class="input-group">
+          <label class="gold">ERTIGA RATE (6S)</label>
+          <input type="number" [(ngModel)]="newRoute.price6" name="price6" placeholder="₹" required>
+        </div>
+        <button type="submit" class="btn-broadcast">
+          <mat-icon>add_road</mat-icon> ADD ROUTE
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="table-container glass-panel">
+    <div class="table-header-main">
+      <h3>ACTIVE FLIGHT PATHS</h3>
+      <span class="route-count">{{ activeRoutes.length }} Routes Detected</span>
+    </div>
+
+    <div class="responsive-table">
+      <table class="pilot-table">
+        <thead>
+          <tr>
+            <th>DESTINATION</th>
+            <th>DISTANCE</th>
+            <th>SWIFT (4S)</th>
+            <th class="gold-text">ERTIGA (6S)</th>
+            <th>ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let route of activeRoutes; let i = index">
+            <td class="route-cell">
+              <div class="path">
+                <mat-icon>place</mat-icon>
+                <span class="city">{{ route.dest }}</span>
+              </div>
+            </td>
+            <td><span class="km-badge">{{ route.km }} KM</span></td>
+            <td class="price">₹{{ route.price4 }}</td>
+            <td class="price gold-text">₹{{ route.price6 }}</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-table-book" (click)="bookCustomRoute(route)">
+                  RESERVE
+                </button>
+                <button *ngIf="isDriver"
+                        class="btn-delete"
+                        title="Delete Route"
+                        (click)="deleteRoute(route.id, i)">
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

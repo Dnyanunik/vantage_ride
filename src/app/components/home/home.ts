@@ -1,68 +1,114 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ThemeService } from '../../theme';  // Ensure path is correct
+import { Component, inject, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common'; // 🔴 Added isPlatformBrowser
+import { Router, RouterModule } from '@angular/router';
+import { ThemeService } from '../../theme';
+import { SupabaseService } from '../../services/supabase';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIcon, RouterModule, MatProgressBarModule],
   templateUrl: './home.html',
-  styleUrls: ['./home.scss']
+  styleUrls: ['./home.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   themeService = inject(ThemeService);
+  supabase = inject(SupabaseService);
+  router = inject(Router);
+  cdr = inject(ChangeDetectorRef);
 
-  // --- CONTACT DETAILS ---
-  phoneNumber1 = '+917972504272';
-  phoneNumber2 = '+919552263633';
-  email = 'vishnushitole978@gmail.com';
+  // 🔴 Get the current platform (Server or Browser)
+  platformId = inject(PLATFORM_ID);
 
-  // --- FLEET DATA (Your Specific Rates) ---
-  cars = [
-    {
-      name: 'Maruti Suzuki Ertiga',
-      type: 'Royal SUV (6+1 Seater)',
-      image: 'image/Ertiga_Car.jpeg',
-      rate: 14,
-      desc: 'Spacious & Powerful. Best for families.',
-      minPkg: '300 km'
-    },
-    {
-      name: 'Swift Dzire',
-      type: 'Premium Sedan (4 Seater)',
-      image: 'image/swift.jpeg',
-      rate: 12,
-      desc: 'High comfort, smooth ride. Best for couples/small groups.',
-      minPkg: '300 km'
-    },
-    {
-      name: 'Swift Dzire New Look',
-      type: 'Comfort Class (4 Seater)',
-      image: 'image/desire.jpeg',
-      rate: 12,
-      desc: 'Smooth ride,Best for couples/small groups',
-      minPkg: '300 km'
+  phoneNumber1 = '+8669113136';
+  email = 'dnyaneshwarn727@gmail.com';
+
+  cars: any[] = [];
+  pilotRoutes: any[] = [];
+  isLoadingCars = true;
+  isLoadingRoutes = true;
+
+  async ngOnInit() {
+    // 🔴 Check if we are in the browser
+    const isBrowser = isPlatformBrowser(this.platformId);
+
+    // 🚀 STEP 1: INSTANT CACHE CHECK (Only in Browser)
+    if (isBrowser) {
+      const cachedCars = sessionStorage.getItem('swiftlux_cars');
+      const cachedRoutes = sessionStorage.getItem('swiftlux_routes');
+
+      if (cachedCars && cachedRoutes) {
+        this.cars = JSON.parse(cachedCars);
+        this.pilotRoutes = JSON.parse(cachedRoutes);
+        this.isLoadingCars = false;
+        this.isLoadingRoutes = false;
+        this.cdr.detectChanges();
+        console.log('⚡ Loaded from Local Cache instantly!');
+      }
     }
-  ];
 
-  // --- ROUND TRIP PACKAGES (From your Image) ---
-  popularRoutes = [
-    { dest: 'Pune ⇄ Bhimashankar', km: '300', price4: 3599, price6: 4500 },
-    { dest: 'Pune ⇄ Lonavala', km: '300', price4: 3599, price6: 4500 },
-    { dest: 'Pune ⇄ Mahabaleshwar', km: '300', price4: 3599, price6: 4500 },
-    { dest: 'Pune ⇄ Matheran', km: '300', price4: 3999, price6: 4599 },
-    { dest: 'Pune ⇄ Alibag', km: '300', price4: 5999, price6: 6599 },
-    { dest: 'Pune ⇄ Diveagar', km: '300', price4: 5999, price6: 6599 },
-    { dest: 'Pune ⇄ Tarkarli', km: '300', price4: 10999, price6: 12599 },
-    { dest: 'Pune ⇄ Goa', km: '1000', price4: 14999, price6: 16999 },
-  ];
+    // 🚀 STEP 2: SILENT BACKGROUND FETCH
+    try {
+      const [carsResult, routesResult] = await Promise.all([
+        this.supabase.getVehicles().catch((err: any) => {
+          console.error('🚗 Fleet Error:', err);
+          return [];
+        }),
 
-  // --- ACTIONS ---
+        (async () => {
+          const { data, error } = await this.supabase.supabase
+            .from('routes')
+            .select('*')
+            .order('dest', { ascending: true });
+
+          if (error) {
+            console.error('🗺️ Route DB Error:', error);
+            return [];
+          }
+          return data || [];
+        })()
+      ]);
+
+      this.cars = carsResult || [];
+      this.pilotRoutes = routesResult;
+
+      // 🚀 STEP 3: UPDATE THE CACHE FOR NEXT TIME (Only in Browser)
+      if (isBrowser) {
+        sessionStorage.setItem('swiftlux_cars', JSON.stringify(this.cars));
+        sessionStorage.setItem('swiftlux_routes', JSON.stringify(this.pilotRoutes));
+      }
+
+    } catch (error: any) {
+      console.error('Critical Fetch Error:', error);
+    } finally {
+      // 🚀 STEP 4: WAKE UP ANGULAR
+      setTimeout(() => {
+        this.isLoadingCars = false;
+        this.isLoadingRoutes = false;
+        this.cdr.detectChanges();
+      }, 0);
+    }
+  }
+
   makeCall() { window.location.href = `tel:${this.phoneNumber1}`; }
   sendEmail() { window.location.href = `mailto:${this.email}`; }
 
-  bookRide(carName: string) {
-    const text = `Hello, I am interested in booking the ${carName}.`;
-    window.open(`https://wa.me/${this.phoneNumber1.replace('+','')}?text=${encodeURIComponent(text)}`, '_blank');
+  async bookRide(itemName: string) {
+    const user = await this.supabase.getCurrentUser();
+    if (!user) {
+      alert('Please log in to book your ride.');
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.router.navigate(['/book-ride'], { queryParams: { item: itemName } });
+  }
+  scrollToFleet() {
+    const fleetSection = document.getElementById('fleet-section');
+    if (fleetSection) {
+      fleetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

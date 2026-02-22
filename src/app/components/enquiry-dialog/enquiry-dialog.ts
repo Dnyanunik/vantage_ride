@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -7,9 +7,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSelectModule } from '@angular/material/select'; // Ensure this is imported
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { SupabaseService } from '../../services/supabase';
 
 @Component({
   selector: 'app-enquiry-dialog',
@@ -17,53 +21,37 @@ import { map, startWith } from 'rxjs/operators';
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, MatDialogModule,
     MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule,
-    MatAutocompleteModule, MatSelectModule
+    MatAutocompleteModule, MatSelectModule,
+    MatDatepickerModule, MatNativeDateModule
   ],
   templateUrl: './enquiry-dialog.html',
   styleUrl: './enquiry-dialog.scss'
 })
 export class EnquiryDialog implements OnInit {
-  enquiry = { name: '', phone: '', source: '', destination: '', car: 'Swift Dzire', message: '' };
+  supabase = inject(SupabaseService);
 
-  locations: string[] = [
-    'Pune', 'Bhimashankar', 'Lonavala', 'Mahabaleshwar',
-    'Alibag', 'Goa', 'Matheran', 'Tarkarli Beach', 'Diveagar Beach'
-  ];
+  enquiry: any = { name: '', phone: '', source: '', destination: '', car: null, date: null, time: '' };
 
-  availableCars = [
-    { name: 'Swift Dzire', type: '4 Seater', icon: 'directions_car' },
-    { name: 'Maruti Suzuki Ertiga', type: '6 Seater', icon: 'airport_shuttle' }, // Fixed 'resolve' to 'name'
-    { name: 'Maruti Suzuki WagonR', type: '4 Seater', icon: 'drive_eta' }
-  ];
-
-  fareMap: any = {
-    'Bhimashankar': { '4 Seater': 3599, '6 Seater': 4500, km: 250 },
-    'Lonavala': { '4 Seater': 3599, '6 Seater': 4500, km: 200 },
-    'Mahabaleshwar': { '4 Seater': 3599, '6 Seater': 4500, km: 280 },
-    'Alibag': { '4 Seater': 5999, '6 Seater': 6599, km: 350 },
-    'Goa': { '4 Seater': 14999, '6 Seater': 16999, km: 1000 },
-    'Matheran': { '4 Seater': 3999, '6 Seater': 4599, km: 250 },
-    'Tarkarli Beach': { '4 Seater': 10999, '6 Seater': 12599, km: 850 },
-    'Diveagar Beach': { '4 Seater': 5999, '6 Seater': 6599, km: 350 }
-  };
-
-  perKmRates: any = {
-    'Maruti Suzuki Ertiga': 15,
-    'Swift Dzire': 12,
-    'Maruti Suzuki WagonR': 11
-  };
+  isSubmitting = false;
+  dbLocations: string[] = [];
+  fareMap: any = {};
+  availableCars: any[] = [];
 
   sourceControl = new FormControl('');
   destControl = new FormControl('');
   filteredSources!: Observable<string[]>;
   filteredDestinations!: Observable<string[]>;
 
+  minDate = new Date();
+
   constructor(
     public ref: MatDialogRef<EnquiryDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.loadDatabaseInfo();
+
     this.filteredSources = this.sourceControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value || ''))
@@ -75,34 +63,136 @@ export class EnquiryDialog implements OnInit {
     );
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.locations.filter(loc => loc.toLowerCase().includes(filterValue));
+  async loadDatabaseInfo() {
+    try {
+      // 1. Fetch Locations
+      const { data: locationsData } = await this.supabase.supabase
+        .from('maharashtra_locations')
+        .select('city_name')
+        .eq('is_active', true);
+
+      if (locationsData) {
+        this.dbLocations = [...new Set(locationsData.map(loc => loc.city_name))].sort();
+      }
+
+      // 2. Fetch Live Fleet (Cars & Specific Drivers)
+      const { data: fleetData } = await this.supabase.supabase
+        .from('fleet')
+        .select('id, driver_id, name, type, rate_per_km, is_active')
+        .eq('is_active', true);
+
+      if (fleetData) {
+        this.availableCars = fleetData.map(car => ({
+          ...car,
+          icon: car.type.includes('6') ? 'airport_shuttle' : 'directions_car'
+        }));
+      }
+
+      // 3. Fetch Pilot Routes Pricing
+      const { data: routesData } = await this.supabase.supabase
+        .from('routes')
+        .select('*');
+
+      if (routesData) {
+        routesData.forEach(route => {
+          this.fareMap[route.dest.toLowerCase()] = {
+            '4 Seater': route.price4,
+            '6 Seater': route.price6,
+            km: route.km,
+            hasPackage: true
+          };
+        });
+      }
+    } catch (error) {
+      console.error('Database fetch failed:', error);
+    }
   }
 
-  // Getter for UI logic
-  get bookingSummary() {
-    const dest = this.destControl.value;
-    const selectedCar = this.enquiry.car;
-    const carObj = this.availableCars.find(c => c.name === selectedCar);
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.dbLocations.filter(loc => loc.toLowerCase().includes(filterValue));
+  }
 
-    if (dest && carObj && this.fareMap[dest]) {
-      const price = this.fareMap[dest][carObj.type];
+  preventTyping(event: Event) {
+    event.preventDefault();
+  }
+
+  openTimePicker(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target && typeof target.showPicker === 'function') {
+      try {
+        target.showPicker();
+      } catch (e) {
+        target.click();
+      }
+    }
+  }
+
+  get bookingSummary() {
+    const dest = this.destControl.value?.toLowerCase() || '';
+    const selectedCar = this.enquiry.car;
+
+    if (dest && selectedCar && this.fareMap[dest]) {
+      const carTypeKey = selectedCar.type.includes('6') ? '6 Seater' : '4 Seater';
+
+      const basePrice = this.fareMap[dest][carTypeKey];
+      const isPackage = this.fareMap[dest].hasPackage;
+      const discount = isPackage ? Math.floor(basePrice * 0.10) : 0;
+      const finalPrice = basePrice - discount;
+
       return {
-        price: `₹${price}/-`,
-        details: `${this.fareMap[dest].km} KM Limit | Extra ₹${this.perKmRates[selectedCar]}/km`,
+        price: `₹${finalPrice}/-`,
+        originalPrice: isPackage ? `₹${basePrice}` : null,
+        hasDiscount: isPackage,
+        details: `${this.fareMap[dest].km} KM Limit | Extra ₹${selectedCar.rate_per_km}/km`,
         valid: true
       };
     }
-    return { price: 'Get Quote', details: 'Select destination for fare', valid: false };
+
+    return { price: 'Select Valid Route', originalPrice: null, hasDiscount: false, details: 'Price unlocks when destination matches pilot routes', valid: false };
   }
 
-  submit() {
-    this.enquiry.source = this.sourceControl.value || '';
-    this.enquiry.destination = this.destControl.value || '';
-    // Attach calculated price to the enquiry object before closing
-    const summary = this.bookingSummary;
-    const finalData = { ...this.enquiry, price: summary.price, extraKm: summary.details };
-    this.ref.close(finalData);
+  async submitBooking() {
+    if (!this.bookingSummary.valid || !this.enquiry.car) return;
+
+    try {
+      this.isSubmitting = true;
+      const { data: { user } } = await this.supabase.supabase.auth.getUser();
+
+      // FIXED DATE LOGIC: Uses local time to prevent the day from shifting backwards
+      const d = new Date(this.enquiry.date!);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+
+      const pickupDateTime = new Date(`${formattedDate}T${this.enquiry.time}`).toISOString();
+
+      const bookingData = {
+        customer_id: user?.id || null,
+        driver_id: this.enquiry.car.driver_id,
+        car_name: this.enquiry.car.name,
+        source_location: this.sourceControl.value,
+        destination_location: this.destControl.value,
+        pickup_time: pickupDateTime,
+        status: 'pending'
+      };
+
+      const { error } = await this.supabase.supabase.from('bookings').insert(bookingData);
+
+      if (error) {
+        console.error("Insert Error:", error.message);
+        alert("Booking failed. Please try again.");
+        return;
+      }
+
+      this.ref.close(true);
+
+    } catch (error: any) {
+      console.error(error);
+      alert('Failed to book ride.');
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 }

@@ -34,13 +34,13 @@
             </div>
           </div>
         </mat-card-content>
-
-         <mat-card-actions>
+<mat-card-actions>
   <button mat-stroked-button
-          color="accent"
           class="connect-btn"
-          (click)="goToLink(member.link)"> {{ member.linkText }}
-    <mat-icon>north_east</mat-icon>
+          (click)="goToLink(member.link)">
+    <mat-icon style="color: #0077b5;">public</mat-icon>
+    {{ member.linkText }}
+    <mat-icon class="arrow-icon">north_east</mat-icon>
   </button>
 </mat-card-actions>
       </div>

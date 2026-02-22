@@ -29,31 +29,28 @@ interface TeamMember {
 export class About {
 
   // Emotional Content Data
-  public missionHeader = {
-    tag: 'MISSION_ORIGIN_STORY',
-    title: 'FROM HUMBLE ROOTS TO LUXURY ROUTES',
-    intro: 'Ten years ago, a dream started in a small village. Today, that struggle has evolved into a fleet of excellence built on grit and 8000+ successful journeys.'
+  missionHeader = {
+    tag: 'OUR GENESIS',
+    title: 'THE VANTAGE VISION',
+    intro: 'From a local dream to a global standard of mobility. A decade of relentless grit has forged a premium platform, redefining travel through 2,000+ flawless journeys.'
   };
 
   public team: TeamMember[] = [
     {
-      name: 'Vishnu Shitole',
-      role: 'FOUNDER & CHIEF PILOT',
-      image: 'image/vishnu.jpeg',
-      experience: '10 YEARS',
-      description: `Born in a small village, our founder understood the value of every rupee and the importance of a helping hand.
-                    He didn't start with a fleet; he started with a promise to provide dignity in travel.
-                    After a decade of navigating roads and hearts, he has completed over 8000+ trips,
-                    growing from a single dream to a proud owner of 3 luxury vehicles.`,
-      tags: ['Grounded Values', 'Expert Navigator', '8000+ Trips'],
-      stats: [
-        { label: 'Experience', value: '10Y' },
-        { label: 'Missions', value: '8000+' },
-        { label: 'Fleet', value: '03' }
-      ],
+      name: 'Dnyaneshwar Nikam',
+      role: 'Founder & Lead Developer',
+      experience: '2+ Years',
+      image: 'image/Dnyaneshwar.jpg', // Make sure to put your image in the assets folder!
       isInverted: false,
-      link: 'https://wa.me/917972504272?text=Hello!%20I%20am%20interested%20in%20your%20luxury%20car%20service', // Replace with real phone
-      linkText: 'WHATSAPP'
+      description: 'Driving the technological and operational vision of Vantage Ride. Combining deep industry expertise with modern software development to engineer a seamless, world-class mobility experience from the ground up.',
+      tags: ['Tech Visionary', 'Global Mobility', 'Operations Scalability'],
+      stats: [
+        { value: '2K+', label: 'Journeys' },
+        { value: '2 Yrs', label: 'Legacy' },
+        { value: '100%', label: 'Commitment' }
+      ],
+      linkText: 'LinkedIn',
+      link: 'https://www.linkedin.com/in/dnyaneshwar-haridas-nikam-458191281' // Replace with your actual LinkedIn URL
     },
     {
       name: 'Ganesh Nikam',
@@ -71,10 +68,9 @@ export class About {
     }
   ];
 
-  goToLink(url: string) {
-    if (url) {
-      // opens the link in a new tab immediately
-      window.open(url, '_blank', 'noopener noreferrer');
+ goToLink(url: string) {
+    if(url) {
+      window.open(url, '_blank');
     }
   }
 }

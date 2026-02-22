@@ -1,83 +1,104 @@
 <div class="home-wrapper">
 
-  <header class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1 class="animate-up">VISHNU <span class="gold">&</span> DEVA</h1>
-      <p class="animate-up delay-1">Premium Tours & Travels</p>
+ <header class="hero">
+  <div class="hero-overlay"></div>
 
-      <div class="hero-badges animate-up delay-2">
-        <div class="badge">
-          <span>📅</span> Minimum 1 Day
-        </div>
-        <div class="badge">
-          <span>🛣️</span> 300km Package
-        </div>
+  <div class="hero-content">
+    <h1 class="animate-up">VANTAGE <span class="ride">RIDE</span></h1>
+    <p class="animate-up delay-1">Global Mobility, Elevated.</p>
+
+    <div class="hero-badges animate-up delay-2">
+      <div class="badge">
+        <mat-icon>public</mat-icon>
+        <span>World-Class Standards</span>
       </div>
-
-      <div class="hero-actions animate-up delay-3">
-        <button class="btn-primary" (click)="makeCall()">📞 Call Now</button>
-        <button class="btn-outline" (click)="sendEmail()">✉️ Email</button>
+      <div class="badge">
+        <mat-icon>verified_user</mat-icon>
+        <span>Executive Fleet</span>
+      </div>
+      <div class="badge">
+        <mat-icon>business_center</mat-icon>
+        <span>Corporate Solutions</span>
       </div>
     </div>
-  </header>
+
+    <div class="hero-actions animate-up delay-3">
+      <button class="btn-primary" routerLink="/book-ride">
+        <mat-icon>directions_car</mat-icon> Reserve Now
+      </button>
+      <button class="btn-outline" (click)="scrollToFleet()">
+        <mat-icon>explore</mat-icon> View Fleet
+      </button>
+    </div>
+  </div>
+</header>
 
   <section class="section fleet">
     <div class="section-title">
       <h2>OUR PREMIUM FLEET</h2>
       <div class="line"></div>
-      <p>Luxury at affordable rates</p>
     </div>
 
-    <div class="fleet-grid">
+    <mat-progress-bar *ngIf="isLoadingCars" mode="indeterminate" color="accent" class="custom-loader"></mat-progress-bar>
+
+    <div *ngIf="!isLoadingCars" class="fleet-grid">
       <div class="car-card glass" *ngFor="let car of cars">
         <div class="img-box">
-          <img [src]="car.image" [alt]="car.name">
-          <div class="rate-tag">₹{{ car.rate }} / km</div>
+          <img [src]="car.image_url || 'assets/default-car.png'" [alt]="car.name">
+          <div class="rate-tag">₹{{ car.rate_per_km }} / km</div>
         </div>
         <div class="details">
           <h3>{{ car.name }}</h3>
-          <p class="type">{{ car.type }}</p>
-          <p class="desc">{{ car.desc }}</p>
-
-          <div class="specs">
-            <span>⛽ Min: {{ car.minPkg }}</span>
-            <span>🅿️ Toll/Park: Extra</span>
-          </div>
-
-          <button class="btn-book" (click)="bookRide(car.name)">Book This Car</button>
+          <p class="desc">{{ car.description }}</p>
+         <button class="btn-book"
+        [routerLink]="['/book-ride']"
+        [queryParams]="{ car: car.name, driver_id: car.driver_id }">
+  Book Now
+</button>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section packages">
+  <section class="section routes">
     <div class="section-title">
-      <h2>ROUND TRIP PACKAGES</h2>
+      <h2>POPULAR PILOT ROUTES</h2>
       <div class="line"></div>
-      <p>Pune to Popular Destinations</p>
+      <p>Instant booking for top destinations</p>
     </div>
 
-    <div class="table-container glass">
-      <div class="table-head">
-        <div class="col">DESTINATION</div>
-        <div class="col">KM</div>
-        <div class="col">SWIFT (4 Seater)</div>
-        <div class="col gold">ERTIGA (7 Seater)</div>
-        <div class="col">ACTION</div>
-      </div>
+    <mat-progress-bar *ngIf="isLoadingRoutes" mode="indeterminate" color="accent" class="custom-loader"></mat-progress-bar>
+    <div *ngIf="isLoadingRoutes" class="loader-text">Scanning Satellite Routes...</div>
 
-      <div class="table-row" *ngFor="let route of popularRoutes">
-        <div class="col dest">📍 {{ route.dest }}</div>
-        <div class="col km">{{ route.km }} KM</div>
-        <div class="col price">₹{{ route.price4 }}</div>
-        <div class="col price gold">₹{{ route.price6 }}</div>
-        <div class="col action">
-          <button class="btn-small" (click)="bookRide(route.dest)">Book</button>
+    <div class="route-grid" *ngIf="!isLoadingRoutes">
+      <div class="route-card glass animate-up" *ngFor="let route of pilotRoutes">
+        <div class="route-header">
+          <span class="dist-tag">📍 {{ route.km }} KM</span>
+          <div class="route-path">
+            <span class="origin">PUNE</span>
+            <mat-icon>multiple_stop</mat-icon>
+            <span class="dest">{{ route.dest }}</span>
+          </div>
         </div>
+
+        <div class="route-pricing">
+          <div class="price-box">
+            <span class="label">SWIFT</span>
+            <span class="val">₹{{ route.price4 }}</span>
+          </div>
+          <div class="price-box gold">
+            <span class="label">ERTIGA</span>
+            <span class="val">₹{{ route.price6 }}</span>
+          </div>
+        </div>
+
+        <button class="btn-route-book" (click)="bookRide(route.dest)">
+          INITIATE MISSION
+        </button>
       </div>
     </div>
-    <p class="disclaimer">Driver food & Toll/Parking extra Rates subject to change.</p>
+
+    <p class="disclaimer">Driver food & Toll/Parking extra. Rates subject to satellite updates.</p>
   </section>
 
 </div>

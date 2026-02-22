@@ -1,7 +1,8 @@
+/* --- 1. GLOBAL DIALOG & TYPOGRAPHY --- */
 .premium-dialog {
-  padding: 30px;
+  padding: 20px;
   background: var(--bg-primary);
-  color: var(--text-primary); /* <--- ADD THIS: Ensures default text turns white in dark mode */
+  color: var(--text-primary);
 
   h2 {
     font-family: 'Rajdhani', sans-serif;
@@ -24,37 +25,81 @@
   }
 
   .description {
-    color: var(--text-secondary); /* Uses your #94a3b8 in dark mode */
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin-bottom: 25px;
   }
 }
 
-/* --- THEME-FIX FOR MATERIAL INPUTS --- */
-/* This ensures the labels, input text, and icons follow your theme variables */
+.full-width {
+  width: 100%;
+}
+
+/* Custom Scrollbar for Dialog Content */
+mat-dialog-content {
+  max-height: 70vh;
+  padding-top: 10px !important;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+  }
+}
+
+/* --- 2. THEME-FIX FOR MATERIAL INPUTS --- */
 :host ::ng-deep {
+  /* Input Text & Caret */
+  .mat-mdc-input-element {
+    color: var(--text-primary) !important;
+    caret-color: var(--brand-rose) !important;
+
+    &::placeholder {
+      color: var(--text-secondary) !important;
+    }
+  }
+
+  /* Floating Labels */
+  .mdc-floating-label,
   .mat-mdc-form-field-label {
     color: var(--text-secondary) !important;
   }
 
-  .mat-mdc-input-element {
-    color: var(--text-primary) !important;
-    caret-color: var(--brand-rose) !important;
-  }
-
-  .mat-mdc-form-field-icon-prefix mat-icon {
+  /* Focused Label Color */
+  .mat-mdc-form-field.mat-focused .mdc-floating-label {
     color: var(--brand-rose) !important;
   }
 
-  /* Outline color in dark mode */
+  /* Icons */
+  .mat-mdc-form-field-icon-prefix mat-icon,
+  .mat-mdc-form-field-icon-suffix mat-icon,
+  .mat-datepicker-toggle mat-icon {
+    color: var(--brand-rose) !important;
+  }
+
+  /* Outline/Border configuration */
   .mdc-notched-outline__leading,
   .mdc-notched-outline__notch,
   .mdc-notched-outline__trailing {
     border-color: var(--border-color) !important;
   }
+
+  /* Select Text & Arrow */
+  .mat-mdc-select-value {
+    color: var(--text-primary) !important;
+  }
+  .mat-mdc-select-arrow {
+    color: var(--brand-rose) !important;
+  }
 }
 
-/* --- NAVIGATION LOGIC VISUAL --- */
+
+/* --- 3. ROUTE NAVIGATION VISUAL --- */
 .route-container {
   display: flex;
   gap: 20px;
@@ -69,14 +114,13 @@
     .dot {
       width: 10px; height: 10px;
       border-radius: 50%;
-      &.source-dot { border: 2px solid var(--brand-success); }
+      &.source-dot { border: 2px solid #2ed573; /* Success Green */ }
       &.dest-dot { background: var(--brand-rose); box-shadow: 0 0 10px var(--brand-rose); }
     }
 
     .line {
       width: 1px;
       flex-grow: 1;
-      /* Changed from white to use the theme's border color */
       border-left: 1px dashed var(--border-color);
       margin: 5px 0;
     }
@@ -90,73 +134,45 @@
   }
 }
 
-.car-note {
-  font-size: 0.7rem;
-  color: var(--brand-gold);
-  text-align: center;
-  background: rgba(212, 175, 55, 0.05);
-  padding: 8px;
-  border-radius: 8px;
-  margin-top: 15px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
-}
 
-.send-btn {
-  background: var(--brand-rose) !important;
-  color: white !important;
-  height: 50px;
-  padding: 0 30px !important;
-  border-radius: 12px !important;
-  font-weight: 800 !important;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 10px 20px rgba(233, 30, 99, 0.3) !important;
+/* --- 4. DATE & TIME LAYOUT --- */
+/* --- 4. DATE & TIME LAYOUT --- */
+.datetime-row {
+  display: flex;
+  gap: 15px;
 
-  &:disabled {
-    background: #333 !important;
-    color: #666 !important;
-    box-shadow: none !important;
+  .full-width {
+    flex: 1;
   }
-}
-/* Target the internal Material Input elements */
-:host ::ng-deep {
-  /* 1. The actual text you type in the input */
-  .mat-mdc-input-element {
-    color: var(--text-primary) !important;
-    caret-color: var(--brand-rose) !important; /* Color of the blinking cursor */
 
-    &::placeholder {
-      color: var(--text-secondary) !important;
+  /* Target both native and Material inputs */
+  input {
+    cursor: pointer !important;
+  }
+
+  /* This ensures the Material Datepicker Popup is visible */
+  color-scheme: dark;
+
+  /* Prevent Material from blocking the click on the form field */
+  mat-form-field {
+    &.mat-mdc-form-field {
+      cursor: pointer;
+    }
+
+    /* Ensure the suffix icon (calendar) doesn't block the click */
+    .mat-mdc-form-field-icon-suffix {
+      cursor: pointer;
     }
   }
-
-  /* 2. The Floating Label (Name, Mobile Number, etc.) */
-  .mdc-floating-label,
-  .mat-mdc-form-field-label {
-    color: var(--text-secondary) !important;
-  }
-
-  /* 3. The Label color when the input is focused */
-  .mat-mdc-form-field.mat-focused .mdc-floating-label {
-    color: var(--brand-rose) !important;
-  }
-
-  /* 4. The Outline/Border of the input box */
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__trailing {
-    border-color: var(--border-color) !important;
-  }
 }
 
-/* Ensure the main dialog container also has the correct text color */
-.premium-dialog {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  /* ... keep your other existing styles ... */
+/* Add this to your GLOBAL styles or end of file to ensure the popup is on top */
+.cdk-overlay-container {
+  z-index: 9999 !important;
 }
 
-/* Car Option Layout */
+
+/* --- 5. CAR SELECTION OPTION --- */
 .car-option-layout {
   display: flex;
   align-items: center;
@@ -179,53 +195,10 @@
   }
 }
 
-/* Ensure the select text inside the input follows the theme */
-:host ::ng-deep {
-  .mat-mdc-select-value {
-    color: var(--text-primary) !important;
-  }
-  .mat-mdc-select-arrow {
-    color: var(--brand-rose) !important;
-  }
-}
-.price-tag-container {
-  background: rgba(255, 215, 0, 0.1); /* Soft Gold background */
-  border: 1px dashed var(--brand-gold);
-  border-radius: 12px;
-  padding: 15px;
-  text-align: center;
-  margin: 20px 0;
-  animation: fadeIn 0.5s ease-in;
 
-  .price-label {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .price-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--brand-gold);
-    font-family: 'Rajdhani', sans-serif;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  }
-
-  .price-subtext {
-    font-size: 0.65rem;
-    color: var(--text-secondary);
-    font-style: italic;
-  }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* --- 6. FARE TICKET SUMMARY --- */
 .fare-ticket {
-  margin: 20px 0;
+  margin: 20px 0 10px 0;
   border: 1px solid var(--border-color);
   border-radius: 12px;
   background: var(--bg-secondary);
@@ -236,11 +209,11 @@
   &.active {
     opacity: 1;
     border-color: var(--brand-gold);
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1);
   }
 
   .ticket-header {
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(212, 175, 55, 0.1);
     padding: 8px 15px;
     display: flex;
     align-items: center;
@@ -255,17 +228,50 @@
     padding: 15px;
     text-align: center;
 
+    /* New: Styling for the pilot route discount badge */
+    .discount-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(46, 213, 115, 0.1); /* Soft green background */
+      color: #2ed573;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+
+      mat-icon {
+        font-size: 14px;
+        width: 14px;
+        height: 14px;
+      }
+    }
+
     .main-price {
       font-size: 2.2rem;
       font-weight: 800;
       color: var(--text-primary);
       font-family: 'Rajdhani', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      /* New: Strikethrough style for the original price */
+      .original-price {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        text-decoration: line-through;
+        font-weight: 500;
+      }
     }
 
     .sub-details {
       font-size: 0.85rem;
       color: var(--brand-rose);
       font-weight: 600;
+      margin-top: 5px;
     }
   }
 
@@ -273,26 +279,50 @@
     font-size: 0.65rem;
     padding: 5px;
     text-align: center;
-    background: rgba(0,0,0,0.05);
+    background: rgba(0,0,0,0.2);
     color: var(--text-secondary);
   }
 }
-//for cancel button
+
+
+/* --- 7. BUTTONS --- */
 .cancel-btn {
   font-family: 'Rajdhani', sans-serif !important;
   font-weight: 700 !important;
   letter-spacing: 1px;
   text-transform: uppercase;
-
-  // Theme Logic
-  color: var(--text-secondary) !important; // Gray in light mode, Slate in dark mode
+  color: var(--text-secondary) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 12px !important;
   transition: all 0.3s ease !important;
 
   &:hover {
-    background: rgba(var(--brand-rose), 0.05) !important;
+    background: rgba(233, 30, 99, 0.05) !important; /* Rose alpha */
     color: var(--brand-rose) !important;
     border-color: var(--brand-rose) !important;
   }
+}
+
+.send-btn {
+  background: var(--brand-rose) !important;
+  color: white !important;
+  height: 50px;
+  padding: 0 30px !important;
+  border-radius: 12px !important;
+  font-weight: 800 !important;
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 10px 20px rgba(233, 30, 99, 0.3) !important;
+  margin-left: 10px !important;
+
+  &:disabled {
+    background: #2a2a2a !important; /* Dark grey for disabled */
+    color: #666 !important;
+    box-shadow: none !important;
+  }
+}
+
+mat-dialog-actions {
+  padding: 0 20px 20px 20px !important;
 }

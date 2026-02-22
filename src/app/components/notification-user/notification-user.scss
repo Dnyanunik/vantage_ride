@@ -1,0 +1,163 @@
+.notification-wrapper {
+  position: relative;
+  z-index: 1000;
+}
+
+.bell-btn {
+  background: transparent;
+  border: none;
+  color: #e613c6;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  mat-icon { font-size: 28px; width: 28px; height: 28px; }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+  }
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: 50px;
+  right: -10px;
+  width: 360px;
+  max-height: 500px;
+  overflow-y: auto;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #555; border-radius: 10px; }
+}
+
+.glass {
+  background: linear-gradient(145deg, rgba(30, 30, 30, 0.95), rgba(15, 15, 15, 0.98));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.5);
+
+  h3 {
+    margin: 0; font-size: 1rem; color: #fff; font-weight: 600;
+  }
+
+  .close-btn {
+    background: transparent; border: none; color: #888; cursor: pointer;
+    &:hover { color: #fff; }
+  }
+}
+
+.panel-body { padding: 15px; }
+
+.empty-state, .loading-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; color: #888; padding: 40px 0;
+  mat-icon { font-size: 40px; width: 40px; height: 40px; color: rgba(255, 255, 255, 0.3); }
+}
+
+.mini-spinner {
+  width: 30px; height: 30px; border: 2px solid rgba(255,255,255,0.1);
+  border-top: 2px solid #fff; border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.request-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 15px;
+  padding-top: 40px; // Make room for driver info
+  transition: all 0.2s ease;
+
+  &:hover { background: rgba(255, 255, 255, 0.06); }
+
+  .mini-dismiss {
+    position: absolute; top: 10px; left: 10px; // Moved left so it doesn't clash with driver info
+    background: transparent; border: none; color: #666;
+    cursor: pointer; padding: 0;
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+    &:hover { color: #ff4444; }
+  }
+
+  .driver-corner {
+    position: absolute; top: 8px; right: 10px;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+    background: rgba(0, 0, 0, 0.5); padding: 4px 8px; border-radius: 6px;
+
+    span {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.65rem; color: #aaa;
+      mat-icon { font-size: 12px; width: 12px; height: 12px; color: #fff; }
+    }
+    .d-name { color: #eee; font-weight: 600; }
+  }
+
+  .card-content {
+    display: flex; gap: 12px; align-items: flex-start;
+
+    .status-indicator {
+      width: 4px; height: 38px; border-radius: 2px; flex-shrink: 0;
+      &.pending { background: #ffc107; box-shadow: 0 0 5px rgba(255, 193, 7, 0.4); }
+      &.accepted { background: #00e676; box-shadow: 0 0 5px rgba(0, 230, 118, 0.4); }
+      &.rejected { background: #ff4444; box-shadow: 0 0 5px rgba(255, 68, 68, 0.4); }
+    }
+
+    .info-text {
+      p { margin: 0; line-height: 1.4; }
+      .msg { font-size: 0.9rem; color: #fff; letter-spacing: 0.5px; }
+      .details {
+        font-size: 0.75rem; color: #aaa; margin-top: 4px;
+        display: flex; align-items: center; gap: 4px;
+        .arrow { font-size: 14px; width: 14px; height: 14px; }
+      }
+    }
+  }
+
+  .card-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
+
+    .car-type {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.7rem; color: #888;
+      mat-icon { font-size: 14px; width: 14px; height: 14px; }
+    }
+
+    .btn-read {
+      background: transparent; border: none; color: #d4af37;
+      font-size: 0.7rem; font-weight: bold; cursor: pointer; letter-spacing: 0.5px;
+      transition: color 0.2s;
+      &:hover { color: #fff; }
+    }
+  }
+}
+
+.overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999; }
+
+@media (max-width: 600px) {
+  .dropdown-panel { position: fixed; top: 70px; left: 10px; right: 10px; width: auto; }
+}

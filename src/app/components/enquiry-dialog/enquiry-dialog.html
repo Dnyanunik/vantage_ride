@@ -15,12 +15,6 @@
     </mat-form-field>
 
     <div class="route-container">
-      <div class="route-line-visual">
-        <div class="dot source-dot"></div>
-        <div class="line"></div>
-        <div class="dot dest-dot"></div>
-      </div>
-
       <div class="route-inputs">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Source (Pickup)</mat-label>
@@ -44,11 +38,37 @@
       </div>
     </div>
 
+    <div class="datetime-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Pickup Date</mat-label>
+        <input matInput
+               [matDatepicker]="picker"
+               [min]="minDate"
+               [(ngModel)]="enquiry.date"
+               name="pickupDate"
+               required
+               (click)="picker.open()">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Pickup Time</mat-label>
+        <input matInput
+               type="time"
+               [(ngModel)]="enquiry.time"
+               name="pickupTime"
+               required
+               (click)="$event.stopPropagation()">
+        <mat-icon matSuffix>schedule</mat-icon>
+      </mat-form-field>
+    </div>
+
     <mat-form-field appearance="outline" class="full-width car-select-field">
       <mat-label>Select Vehicle</mat-label>
       <mat-select [(ngModel)]="enquiry.car" name="car" required>
-        @for (car of availableCars; track car.name) {
-          <mat-option [value]="car.name">
+        @for (car of availableCars; track car.id) {
+          <mat-option [value]="car">
             <div class="car-option-layout">
               <mat-icon>{{ car.icon }}</mat-icon>
               <span class="car-name">{{ car.name }}</span>
@@ -65,28 +85,30 @@
         <span>Fare Summary</span>
       </div>
       <div class="ticket-body">
-        <div class="main-price">{{ bookingSummary.price }}</div>
+        <div class="discount-badge" *ngIf="bookingSummary.hasDiscount">
+          <mat-icon>local_offer</mat-icon> Pilot Route Matched!
+        </div>
+        <div class="main-price">
+          <span class="original-price" *ngIf="bookingSummary.hasDiscount">
+            {{ bookingSummary.originalPrice }}
+          </span>
+          {{ bookingSummary.price }}
+        </div>
         <div class="sub-details">{{ bookingSummary.details }}</div>
       </div>
-      <div class="ticket-footer">*Toll & State Tax extra as per actuals</div>
+      <div class="ticket-footer" *ngIf="bookingSummary.valid">*Toll & State Tax extra as per actuals</div>
     </div>
-
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Additional Details (Optional)</mat-label>
-      <textarea matInput [(ngModel)]="enquiry.message" rows="2" placeholder="Shifts, luggage, etc."></textarea>
-      <mat-icon matPrefix>notes</mat-icon>
-    </mat-form-field>
 
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-   <button mat-button class="cancel-btn" (click)="ref.close()">
-    Cancel
-  </button>
+    <button mat-button class="cancel-btn" (click)="ref.close()">
+      Cancel
+    </button>
     <button mat-flat-button class="send-btn"
-            [disabled]="!enquiry.name || !enquiry.phone || !destControl.value"
-            (click)="submit()">
-      Confirm Booking <mat-icon>send</mat-icon>
+            [disabled]="!enquiry.name || !enquiry.phone || !bookingSummary.valid || !enquiry.date || !enquiry.time || !enquiry.car || isSubmitting"
+            (click)="submitBooking()">
+      {{ isSubmitting ? 'Booking...' : 'Confirm Booking' }} <mat-icon>send</mat-icon>
     </button>
   </mat-dialog-actions>
 </div>

@@ -1,0 +1,76 @@
+<div class="booking-wrapper">
+  <div class="booking-card glass">
+
+    <div class="header">
+      <h2>BOOK YOUR RIDE</h2>
+      <p class="car-badge">Selected Vehicle: <span>{{ selectedCar }}</span></p>
+    </div>
+
+    <div class="map-placeholder">
+      <p>📍 Location Map: <strong>WORK IN PROGRESS...</strong></p>
+    </div>
+
+    <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+
+      <div class="location-section">
+        <label class="section-label">Pickup Location</label>
+        <div class="row">
+          <div class="form-group half">
+            <select formControlName="sourceDistrict" class="custom-select">
+              <option value="" disabled selected>
+                {{ isLoadingLocations ? 'Loading...' : 'Select District' }}
+              </option>
+              <option *ngFor="let dist of districts" [value]="dist">{{ dist }}</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <select formControlName="sourceCity" class="custom-select">
+              <option value="" disabled selected>Select City/Taluka</option>
+              <option *ngFor="let loc of availableSourceCities" [value]="loc.city_name">
+                {{ loc.city_name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="location-section" style="margin-top: 10px;">
+        <label class="section-label">Drop Location</label>
+        <div class="row">
+          <div class="form-group half">
+            <select formControlName="destinationDistrict" class="custom-select">
+              <option value="" disabled selected>
+                {{ isLoadingLocations ? 'Loading...' : 'Select District' }}
+              </option>
+              <option *ngFor="let dist of districts" [value]="dist">{{ dist }}</option>
+            </select>
+          </div>
+          <div class="form-group half">
+            <select formControlName="destinationCity" class="custom-select">
+              <option value="" disabled selected>Select City/Taluka</option>
+              <option *ngFor="let loc of availableDestCities" [value]="loc.city_name">
+                {{ loc.city_name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 10px;">
+        <div class="form-group half">
+          <label class="section-label">Date</label>
+          <input type="date" formControlName="date">
+        </div>
+        <div class="form-group half">
+          <label class="section-label">Time</label>
+          <input type="time" formControlName="time">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isSubmitting || bookingForm.invalid">
+        {{ isSubmitting ? 'BOOKING...' : 'CONFIRM BOOKING' }}
+      </button>
+
+    </form>
+  </div>
+</div>

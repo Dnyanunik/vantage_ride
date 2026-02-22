@@ -1,0 +1,63 @@
+<div class="cockpit-container home-page-reveal">
+  <div class="cockpit-header">
+    <span class="system-id">V&D_CORE_v2.1</span>
+    <h2>FLEET MANIFEST <span>ADD_VEHICLE</span></h2>
+    <p>Initialize a new unit into the Vishnu & Dava Travellers network.</p>
+  </div>
+
+  <form (ngSubmit)="publishVehicle()" #fleetForm="ngForm" class="fleet-form">
+
+    <div class="form-group">
+      <label>UNIT NAME (Car Model)</label>
+      <input type="text" [(ngModel)]="newCar.name" name="name" placeholder="e.g., Maruti Suzuki Ertiga" required>
+    </div>
+
+    <div class="form-group">
+      <label>CLASSIFICATION (Vehicle Type)</label>
+      <select [(ngModel)]="newCar.type" name="type">
+        <option value="Premium Sedan (4 Seater)">Premium Sedan (4 Seater)</option>
+        <option value="Royal SUV (6+1 Seater)">Royal SUV (6+1 Seater)</option>
+        <option value="Comfort Class (4 Seater)">Comfort Class (4 Seater)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>TARIFF (Rate Per Km ₹)</label>
+      <input type="number" [(ngModel)]="newCar.rate" name="rate" placeholder="14" required>
+    </div>
+
+    <div class="form-group">
+      <label>MIN_OPERATIONAL_PKG (Km)</label>
+      <input type="number" [(ngModel)]="newCar.minPkg" name="minPkg" placeholder="300" required>
+    </div>
+
+    <div class="form-group full-width">
+      <label>MISSION_INTEL (Description)</label>
+      <textarea [(ngModel)]="newCar.desc" name="desc" placeholder="Operational details..." rows="3"></textarea>
+    </div>
+
+    <div class="form-group image-upload-group full-width">
+      <label>VISUAL_ID (Vehicle Image)</label>
+
+      <div class="file-upload-wrapper" (click)="fileInput.click()" *ngIf="!imagePreview">
+        <div class="upload-content">
+          <mat-icon>add_a_photo</mat-icon>
+          <span class="upload-text">INITIALIZE OPTIC SCAN (Upload)</span>
+        </div>
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" hidden required>
+      </div>
+
+      <div class="preview-container" *ngIf="imagePreview">
+        <img [src]="imagePreview" alt="Vehicle Preview" class="vehicle-preview-img">
+        <div class="image-overlay"></div>
+        <button type="button" class="remove-btn" (click)="removeImage()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <button type="submit" class="publish-btn" [disabled]="!fleetForm.valid || !selectedFile">
+      DEPLOY TO NETWORK
+    </button>
+  </form>
+</div>
