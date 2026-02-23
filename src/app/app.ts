@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, inject, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
 import { LoaderComponent } from './components/loader/loader';
 import { Navbar } from './components/navbar/navbar';
-import { RouterOutlet } from '@angular/router';
 import { Footer } from './components/footer/footer';
+import { SupabaseService } from './services/supabase';
 
 @Component({
   selector: 'app-root',
@@ -13,21 +14,45 @@ import { Footer } from './components/footer/footer';
   styleUrls: ['./app.scss']
 })
 export class App implements OnInit {
-  // We start as true, but ngOnInit will flip it immediately if needed
   isAppStarting: boolean = true;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  // Modern Angular Injection
+  private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
+  private supabase = inject(SupabaseService);
+  private cdr = inject(ChangeDetectorRef); // 👈 Added this to force UI updates
 
-  ngOnInit() {
+  async ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      // Check if we've already seen the loader in this session
-      const hasSeenLoader = sessionStorage.getItem('app_initialized');
 
-      if (hasSeenLoader === 'true') {
-        this.isAppStarting = false;
+      try {
+        // 1. Check if the user is already logged in
+        const { data: { session } } = await this.supabase.supabase.auth.getSession();
+
+        if (session) {
+          // ✅ USER IS LOGGED IN: Kill the loader instantly
+          this.isAppStarting = false;
+          this.cdr.detectChanges(); // 👈 FORCES Angular to remove the loader right now
+
+          if (this.router.url !== '/home') {
+            this.router.navigate(['/home']);
+          }
+        } else {
+          // ❌ NO USER: Run standard loader logic
+          const hasSeenLoader = sessionStorage.getItem('app_initialized');
+          if (hasSeenLoader === 'true') {
+            this.isAppStarting = false;
+          }
+          this.cdr.detectChanges(); // Update UI
+        }
+      } catch (error) {
+        console.error("Supabase session check failed:", error);
+        this.isAppStarting = false; // Failsafe: hide loader if DB check crashes
+        this.cdr.detectChanges();
       }
+
     } else {
-      // On Server (SSR), we hide the loader so Google can see the content
+      // On Server (SSR/Prerendering)
       this.isAppStarting = false;
     }
   }
@@ -37,5 +62,6 @@ export class App implements OnInit {
       sessionStorage.setItem('app_initialized', 'true');
     }
     this.isAppStarting = false;
+    this.cdr.detectChanges(); // 👈 Force update here too just in case
   }
 }
