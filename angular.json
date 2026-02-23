@@ -17,11 +17,10 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
+           "assets": [
               {
                 "glob": "**/*",
-                "input": "src/public",
-                "output": "/"
+                "input": "public"
               }
             ],
             "styles": [
