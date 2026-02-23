@@ -40,7 +40,7 @@ export class About {
       name: 'Dnyaneshwar Nikam',
       role: 'Founder & Lead Developer',
       experience: '2+ Years',
-      image: 'image/Dnyaneshwar.jpg', // Make sure to put your image in the assets folder!
+      image: '/image/Dnyaneshwar.jpg', // Make sure to put your image in the assets folder!
       isInverted: false,
       description: 'Driving the technological and operational vision of Vantage Ride. Combining deep industry expertise with modern software development to engineer a seamless, world-class mobility experience from the ground up.',
       tags: ['Tech Visionary', 'Global Mobility', 'Operations Scalability'],

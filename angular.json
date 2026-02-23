@@ -18,20 +18,20 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "*",
-                "input": "public",
-                "output": "public"
-              }
+  {
+    "glob": "**/*",
+    "input": "src/public",
+    "output": "/"
+  }
+],
+            "styles": [
+              "src/styles.scss"
             ],
-            "styles": ["src/styles.scss"],
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": false,
-            "ssr": {
-              "entry": "src/server.ts"
-            },
-            "outputMode": "server",
+            "ssr": false,
+            "outputMode": "static",
             "budgets": [
               {
                 "type": "initial",
@@ -47,9 +47,7 @@
           },
           "configurations": {
             "production": {
-              "outputHashing": "all",
-              "prerender": false,
-    "ssr": false
+              "outputHashing": "all"
             },
             "development": {
               "optimization": false,
@@ -62,12 +60,19 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": { "buildTarget": "carservice:build:production" },
-            "development": { "buildTarget": "carservice:build:development" }
+            "production": {
+              "buildTarget": "carservice:build:production"
+            },
+            "development": {
+              "buildTarget": "carservice:build:development"
+            }
           },
           "defaultConfiguration": "development"
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
