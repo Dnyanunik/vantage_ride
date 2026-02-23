@@ -18,17 +18,16 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-  {
-    "glob": "**/*",
-    "input": "src/public",
-    "output": "/"
-  }
-],
+              {
+                "glob": "**/*",
+                "input": "src/public",
+                "output": "/"
+              }
+            ],
             "styles": [
               "src/styles.scss"
             ],
             "scripts": [],
-            "server": "src/main.server.ts",
             "prerender": false,
             "ssr": false,
             "outputMode": "static",
