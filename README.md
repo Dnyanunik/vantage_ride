@@ -210,4 +210,4 @@ Features:
 - Shared backend with web application  
 
 Repository:
-ANDROID_REPO_LINK
+[ANDROID_REPO_LINK](https://github.com/Dnyanunik/vantage_ride_AndroidApp.git)
