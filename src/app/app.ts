@@ -5,7 +5,6 @@ import { LoaderComponent } from './components/loader/loader';
 import { Navbar } from './components/navbar/navbar';
 import { Footer } from './components/footer/footer';
 import { SupabaseService } from './services/supabase';
-
 @Component({
   selector: 'app-root',
   standalone: true,
